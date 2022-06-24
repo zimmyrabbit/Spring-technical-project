@@ -9,7 +9,7 @@
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
 		<java-version>1.8</java-version>
-		<org.springframework-version>5.2.8.RELEASE</org.springframework-version>
+		<org.springframework-version>5.3.6</org.springframework-version>
 		<org.aspectj-version>1.9.6</org.aspectj-version>
 		<org.slf4j-version>1.7.30</org.slf4j-version>
 		<org.mysql.connector-version>8.0.16</org.mysql.connector-version>
@@ -17,10 +17,17 @@
         <org.mybatis.spring-version>1.2.4</org.mybatis.spring-version>
 	</properties>
 	
+	
+	
 	<repositories>
 	  <repository>
 	      <id>jitpack.io</id>
 	      <url>https://jitpack.io</url>
+	  </repository>
+	  
+	  <repository>
+		<id>oracle</id>
+		<url>http://maven.jahia.org/maven2</url>
 	  </repository>
 	</repositories>
 	
@@ -107,7 +114,18 @@
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+				
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
 		
@@ -217,6 +235,20 @@
 		    <groupId>org.jsoup</groupId>
 		    <artifactId>jsoup</artifactId>
 		    <version>1.13.1</version>
+		</dependency>
+		
+		<!-- OJDBC6 라이브러리 -->
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>12.1.0.2</version>
+		</dependency>
+		
+		<!-- Log4JDBC remix 0.2.7 -->
+		<dependency>
+		    <groupId>org.lazyluke</groupId>
+		    <artifactId>log4jdbc-remix</artifactId>
+		    <version>0.2.7</version>
 		</dependency>
 		
 		<!-- ======================================================== -->

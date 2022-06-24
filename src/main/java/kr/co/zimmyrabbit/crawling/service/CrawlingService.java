@@ -19,10 +19,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import kr.co.zimmyrabbit.crawling.dao.CrawlingDao;
 
 @Service
 public class CrawlingService {
+	
+	@Autowired
+	CrawlingDao crawlingDao;
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -221,6 +227,9 @@ public class CrawlingService {
         map.put("googleNewsCompArr", googleNewsCompArr);
         map.put("googleNewsImgArr", googleNewsImgArr);
         map.put("googleNewsRegTmArr", googleNewsRegTmArr);
+        
+        String test = crawlingDao.test();
+        logger.info("=====================> " + test);
         
     	return map;
     }
