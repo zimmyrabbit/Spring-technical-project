@@ -116,6 +116,7 @@ function reqSearchText(siteflag, pageflag) {
 			
 			// NAVER NEWS SETTING
 			if(siteflag == 0 || siteflag == 1) {
+				//naverAPINewsSetting(data);
 				naverNewsSetting(data);
 			}
 			
@@ -133,9 +134,9 @@ function reqSearchText(siteflag, pageflag) {
 }
  
 /*
- * NAVER NEWS SETTING FUNCTION
+ * NAVER NEWS API SETTING FUNCTION
  */
- function naverNewsSetting(data) {
+ function naverAPINewsSetting(data) {
 	 
 	initSearch(1);
 	
@@ -161,6 +162,38 @@ function reqSearchText(siteflag, pageflag) {
 	
 	$("#naverNewsBody").html(vNaverNews);
  }
+ 
+ /*
+  * NAVER NEWS SETTING FUNCTION
+  */
+ function naverNewsSetting(data) {
+ 	
+ 	initSearch(1);
+ 	
+ 	var vNaverNews = "";
+ 	var vNaverPaging = "";
+ 	
+ 	vNaverNews += "<table>"
+ 	vNaverNews += "	<th>뉴스사</th> <th>제목</th> <th>작성일</th>"
+ 	
+ 	for(var i=0; i<data.naver.NaverNewsTitleArr.length; i++) {
+ 		vNaverNews += "	 <tr>"
+ 		vNaverNews += "	  <td>" + data.naver.NaverNewsCompArr[i] + "</td>"
+ 		vNaverNews += "    <td> <a href='" + data.naver.NaverNewsHrefArr[i] + "'>" + data.naver.NaverNewsTitleArr[i] + "</a> </td>"
+ 		vNaverNews += "    <td class='font'>" + data.naver.NaverNewsRegTmArr[i] + "</td>"
+ 	}
+ 	
+ 	vNaverNews += "</table>"
+ 		
+ 	$("#naverNewsBody").html(vNaverNews);
+ 	
+ 	
+ 	for(var j=1; j<11; j++) {
+ 		vNaverPaging += "<a onclick=reqSearchText(1," + j +")>" + j + " </a>";
+ 	}
+ 	
+ 	$("#naverNewsPaging").html(vNaverPaging);
+ }
 
 /*
  * DAUM NEWS SETTING FUNCTION
@@ -185,7 +218,7 @@ function daumNewsSetting(data) {
 	vDaumNews += "</table>"
 		
 	$("#daumNewsBody").html(vDaumNews);
-	
+
 	
 	for(var j=1; j<11; j++) {
 		vDaumPaging += "<a onclick=reqSearchText(2," + j +")>" + j + " </a>";
@@ -202,6 +235,7 @@ function googleNewsSetting(data) {
 	initSearch(3);
 	
 	var vGoogleNews = "";
+	var vGooglePaging = "";
 	
 	vGoogleNews += "<table>"
 	vGoogleNews += "	<th>뉴스사</th> <th>제목</th> <th>작성일</th>"	
@@ -216,6 +250,13 @@ function googleNewsSetting(data) {
 	vGoogleNews += "</table>"
 	
 	$("#googleNewsBody").html(vGoogleNews);
+	
+	
+	for(var j=1; j<11; j++) {
+		vGooglePaging += "<a onclick=reqSearchText(3," + j +")>" + j + " </a>";
+	}
+	
+	$("#googleNewsPaging").html(vGooglePaging);
 }
 
 /*

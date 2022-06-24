@@ -45,8 +45,11 @@ public class CrawlingController {
 		
 		//NAVER NEWS API
 		if("0".equals(siteParam) || "1".equals(siteParam)) {
-			String naverNewsJson = crawlingService.searchNaverNews(searchText);
-			map.put("naver", naverNewsJson);
+			//String naverNewsJson = crawlingService.searchNaverNewsAPI(searchText);
+			//map.put("naver", naverNewsJson);
+			
+			HashMap<String, Object> naverNews = crawlingService.searchNaverNews(searchText, pagingParam);
+			map.put("naver", naverNews);
 		}
 		
 		//DAUM JSOUP CRAWLING

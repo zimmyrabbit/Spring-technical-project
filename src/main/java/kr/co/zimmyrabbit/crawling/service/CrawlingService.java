@@ -34,17 +34,19 @@ public class CrawlingService {
 	
 	public static final String NAVER_CLIENT_ID = "bLIhDQMaNcop4eQEk4A2"; 
 	public static final String NAVER_CLIENT_SECRET = "6dGRdjAFPt"; 
-	public static final String NAVER_NEWS_URL = "https://openapi.naver.com/v1/search/news?query="; 
+	public static final String NAVER_NEWS_API_URL = "https://openapi.naver.com/v1/search/news?query="; 
 	
+	public static final String NAVER_NEWS_URL = "https://search.naver.com/search.naver?where=news&sm=tab_pge&photo=0&field=0&pd=0&ds=&de=&mynews=0&office_type=0&office_section_code=0&news_office_checked=&nso=so:dd,p:all,a:all&query=";
+
 	public static final String DAUM_NEWS_URL = "https://search.daum.net/search?w=news&DA=STC&enc=utf8&cluster=y&cluster_page=1&q=";
 
 	public static final String GOOGLE_NEWS_URL_HEAD = "https://www.google.com/search?q=";
-	public static final String GOOGLE_NEWS_URL_FOOT = "&hl=ko&tbm=nws&sxsrf=ALiCzsYdeFtL2xSjyr8NqUo93p6JSu5u_w:1655799156084&source=lnt&tbs=qdr:m&sa=X&ved=2ahUKEwif6JHEjL74AhV8mFYBHZe6CeEQpwV6BAgBEBw&biw=1536&bih=731&dpr=1.25&start=";
+	public static final String GOOGLE_NEWS_URL_FOOT = "&hl=ko&tbas=0&tbm=nws&sxsrf=ALiCzsaO1EFCPwRq-Qm-J-j_Z7r5RzoEdA:1656091816046&ei=qPS1YsG2Ao-EmAWNkoXIDw&sa=N&ved=2ahUKEwjBqqTjzsb4AhUPAqYKHQ1JAfkQ8tMDegQIARA3&biw=1920&bih=947&dpr=1&start=";
 	
 	/*
 	 * NAVER NEWS SEARCH API <<START>>
 	 */
-	public String searchNaverNews(String searchText) {
+	public String searchNaverNewsAPI(String searchText) {
 		
         String textParam = null;
         int displayParam = 10;
@@ -56,7 +58,7 @@ public class CrawlingService {
             throw new RuntimeException("검색어 인코딩 실패",e);
         }
 
-        String apiURL = NAVER_NEWS_URL + textParam + "&display=" + displayParam + "&sort=" + sortParam;
+        String apiURL = NAVER_NEWS_API_URL + textParam + "&display=" + displayParam + "&sort=" + sortParam;
 
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("X-Naver-Client-Id", NAVER_CLIENT_ID);
@@ -119,6 +121,75 @@ public class CrawlingService {
 	 * NAVER NEWS SEARCH API <<END>>
 	 */
 	
+    //==========================================
+    
+    /*
+     * NAVER NEWS SEARCH JSOUP CRAWLING <<START>>
+     */
+    public HashMap<String, Object> searchNaverNews(String searchText, int pagingParam) {
+    	
+    	String textParam = "";
+    	String sortParam = "1"; // [0 : 관련도순] [1 : 최신순] [2 : 오래된순]
+    	int pageParam = 0;
+    	
+    	if(pagingParam == 1) {
+    		pageParam = pagingParam;
+    	} else {
+    		pageParam = (pagingParam-1) * 10 + 1; 
+    	}
+    	
+    	HashMap<String, Object> map = new HashMap<>();
+    	ArrayList<String> NaverNewsTitleArr = new ArrayList<>();
+    	ArrayList<String> NaverNewsHrefArr = new ArrayList<>();
+    	ArrayList<String> NaverNewsCompArr = new ArrayList<>();
+    	ArrayList<String> NaverNewsRegTmArr = new ArrayList<>();
+    	
+        try {
+        	textParam = URLEncoder.encode(searchText, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("검색어 인코딩 실패",e);
+        }
+        
+        String URL = NAVER_NEWS_URL + textParam + "&sort=" + sortParam + "&start=" + pageParam;
+        
+        Connection conn = Jsoup.connect(URL);
+        
+        try {
+			Document html = conn.get();
+			
+			Elements ulTag = html.getElementsByClass("list_news");
+			
+			int liTagCnt = ulTag.toString().split("<li class=\"bx\"").length-1;
+			
+			for(int i=0; i < liTagCnt; i++) {
+				NaverNewsTitleArr.add(html.getElementsByClass("list_news").get(0).getElementsByTag("li").get(i).getElementsByClass("news_wrap api_ani_send").get(0).getElementsByClass("news_area").get(0).getElementsByClass("news_tit").text());
+				NaverNewsHrefArr.add(html.getElementsByClass("list_news").get(0).getElementsByTag("li").get(i).getElementsByClass("news_wrap api_ani_send").get(0).getElementsByClass("news_area").get(0).getElementsByClass("news_tit").attr("href"));
+				NaverNewsCompArr.add(html.getElementsByClass("list_news").get(0).getElementsByTag("li").get(i).getElementsByClass("news_wrap api_ani_send").get(0).getElementsByClass("news_area").get(0).getElementsByClass("news_info").get(0).getElementsByClass("info_group").get(0).getElementsByClass("info press").text());
+				
+				int timeSpan = html.getElementsByClass("list_news").get(0).getElementsByTag("li").get(i).getElementsByClass("news_wrap api_ani_send").get(0).getElementsByClass("news_area").get(0).getElementsByClass("news_info").get(0).getElementsByClass("info_group").get(0).getElementsByTag("span").toString().split("<span class=\"info\"").length-1;
+				
+				if(timeSpan == 0) {
+					NaverNewsRegTmArr.add(html.getElementsByClass("list_news").get(0).getElementsByTag("li").get(i).getElementsByClass("news_wrap api_ani_send").get(0).getElementsByClass("news_area").get(0).getElementsByClass("news_info").get(0).getElementsByClass("info_group").get(0).getElementsByTag("span").get(0).text());
+				} else {
+					NaverNewsRegTmArr.add(html.getElementsByClass("list_news").get(0).getElementsByTag("li").get(i).getElementsByClass("news_wrap api_ani_send").get(0).getElementsByClass("news_area").get(0).getElementsByClass("news_info").get(0).getElementsByClass("info_group").get(0).getElementsByTag("span").get(timeSpan).text());
+				}
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+        map.put("NaverNewsTitleArr", NaverNewsTitleArr);
+        map.put("NaverNewsHrefArr", NaverNewsHrefArr);
+        map.put("NaverNewsCompArr", NaverNewsCompArr);
+        map.put("NaverNewsRegTmArr", NaverNewsRegTmArr);
+        
+    	return map;
+    }
+    /*
+     * NAVER NEWS SEARCH JSOUP CRAWLING <<END>>
+     */
+    
     //==========================================
     
     /*
@@ -185,13 +256,12 @@ public class CrawlingService {
     public HashMap<String, Object> searchGoogleNews(String searchText, int pagingParam) {
     	
     	String textParam = "";
-    	int pageParam = 0;
+    	int pageParam = (pagingParam-1)*10;
     	
     	HashMap<String, Object> map = new HashMap<>();
     	ArrayList<String> googleNewsTitleArr = new ArrayList<>();
     	ArrayList<String> googleNewsHrefArr = new ArrayList<>();
     	ArrayList<String> googleNewsCompArr = new ArrayList<>();
-    	ArrayList<String> googleNewsImgArr = new ArrayList<>();
     	ArrayList<String> googleNewsRegTmArr = new ArrayList<>();
     	
         try {
@@ -225,11 +295,7 @@ public class CrawlingService {
         map.put("googleNewsTitleArr", googleNewsTitleArr);
         map.put("googleNewsHrefArr", googleNewsHrefArr);
         map.put("googleNewsCompArr", googleNewsCompArr);
-        map.put("googleNewsImgArr", googleNewsImgArr);
         map.put("googleNewsRegTmArr", googleNewsRegTmArr);
-        
-        String test = crawlingDao.test();
-        logger.info("=====================> " + test);
         
     	return map;
     }
