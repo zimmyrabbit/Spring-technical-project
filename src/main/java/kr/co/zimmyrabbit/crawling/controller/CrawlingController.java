@@ -67,13 +67,22 @@ public class CrawlingController {
 		return map;
 	}
 	
+	@RequestMapping(value="/seleniumhq/getScrapNews", method=RequestMethod.GET)
+	@ResponseBody
+	public void getScraoNews(HttpServletRequest request) {
+		String data = request.getParameter("data");
+		
+		logger.info(data);
+	}
+	
+	
 	/*
 	 *  ======== <<개선사항>> ========
 	 *  
 	 *  1. 뉴스 기사 작성한 회사(?)명 가져오기
 	 *  	-> 네이버 API에서는 제공해주는게 없다...
 	 *  	-> 구글, 다음은 크롤링으로 가져왔음
-	 *  	-> 네이버도 크롤링으로 바꿔야하나
+	 *  	-> 네이버도 크롤링으로 바꿔야하나 -> 네이버 크롤링도 일단 만들어둠
 	 *  
 	 *  2. 뉴스 기사 작성한 시간 가져오기
 	 *  	-> NAVER :

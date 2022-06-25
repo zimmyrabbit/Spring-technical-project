@@ -58,6 +58,7 @@
 <input type="text" id="searchText" name="searchText" style="width:400px; display:inline" onkeypress="pressEnterKey(event)"/>
 <button id="searchBtn" onclick="reqSearchText(0,1)">검색</button>
 <button id="initBtn" onclick="initSearch(0)">초기화</button>
+<button id="initBtn" onclick="scrapNews()">스크랩</button>
 </div>
 
 <div id="newsHead" class="parentNewsDiv newsHead">
@@ -145,16 +146,17 @@ function reqSearchText(siteflag, pageflag) {
 	var vNaverNewsItem = JSON.parse(data.naver);
 	 
 	vNaverNews += "<table>"
-	vNaverNews += "	<th>뉴스사</th> <th>제목</th> <th class='RegTmArr'>작성일</th>"
+	vNaverNews += "	<th></th> <th>뉴스사</th> <th>제목</th> <th class='RegTmArr'>작성일</th>"
 	
 	for(var i=0; i<vNaverNewsItem.display; i++) {
 			
 		var rawDate = new Date(vNaverNewsItem.items[i].pubDate);
 		var date = rawDate.getFullYear() + "." + rawDate.getMonth() + "." + rawDate.getDate();
 		
-		vNaverNews += "	 <tr class=''>"
+		vNaverNews += "	 <tr>"
+		vNaverNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
 		vNaverNews += "	  <td> </td>"
-		vNaverNews += "   <td> <a href='" + vNaverNewsItem.items[i].link + "'>" + vNaverNewsItem.items[i].title + "</a> </td>"
+		vNaverNews += "   <td> <a href='" + vNaverNewsItem.items[i].link + "' target='_blank'>" + vNaverNewsItem.items[i].title + "</a> </td>"
 		vNaverNews += "	  <td>" + date + "</td>"
 	}
 	
@@ -174,13 +176,15 @@ function reqSearchText(siteflag, pageflag) {
  	var vNaverPaging = "";
  	
  	vNaverNews += "<table>"
- 	vNaverNews += "	<th>뉴스사</th> <th>제목</th> <th>작성일</th>"
+ 	vNaverNews += "	<th></th> <th>뉴스사</th> <th>제목</th> <th>작성일</th>"
  	
  	for(var i=0; i<data.naver.NaverNewsTitleArr.length; i++) {
  		vNaverNews += "	 <tr>"
+ 		vNaverNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
  		vNaverNews += "	  <td>" + data.naver.NaverNewsCompArr[i] + "</td>"
- 		vNaverNews += "    <td> <a href='" + data.naver.NaverNewsHrefArr[i] + "'>" + data.naver.NaverNewsTitleArr[i] + "</a> </td>"
- 		vNaverNews += "    <td class='font'>" + data.naver.NaverNewsRegTmArr[i] + "</td>"
+ 		vNaverNews += "   <td> <a href='" + data.naver.NaverNewsHrefArr[i] + "' target='_blank'>" + data.naver.NaverNewsTitleArr[i] + "</a> </td>"
+ 		vNaverNews += "   <td class='font'>" + data.naver.NaverNewsRegTmArr[i] + "</td>"
+ 		vNaverNews += "  </tr>"
  	}
  	
  	vNaverNews += "</table>"
@@ -206,13 +210,15 @@ function daumNewsSetting(data) {
 	var vDaumPaging = "";
 	
 	vDaumNews += "<table>"
-	vDaumNews += "	<th>뉴스사</th> <th>제목</th> <th>작성일</th>"
+	vDaumNews += "	<th></th> <th>뉴스사</th> <th>제목</th> <th>작성일</th>"
 	
 	for(var i=0; i<data.daum.daumNewsTitleArr.length; i++) {
 		vDaumNews += "	 <tr>"
+		vDaumNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
 		vDaumNews += "	  <td>" + data.daum.daumNewsCompArr[i] + "</td>"
-		vDaumNews += "    <td> <a href='" + data.daum.daumNewsHrefArr[i] + "'>" + data.daum.daumNewsTitleArr[i] + "</a> </td>"
+		vDaumNews += "    <td> <a href='" + data.daum.daumNewsHrefArr[i] + "' target='_blank'>" + data.daum.daumNewsTitleArr[i] + "</a> </td>"
 		vDaumNews += "    <td class='font'>" + data.daum.daumNewsRegTmArr[i] + "</td>"
+		vDaumNews += "   </tr>"
 	}
 	
 	vDaumNews += "</table>"
@@ -238,13 +244,15 @@ function googleNewsSetting(data) {
 	var vGooglePaging = "";
 	
 	vGoogleNews += "<table>"
-	vGoogleNews += "	<th>뉴스사</th> <th>제목</th> <th>작성일</th>"	
+	vGoogleNews += " <th></th> <th>뉴스사</th> <th>제목</th> <th>작성일</th>"	
 	
 	for(var i=0; i<data.google.googleNewsTitleArr.length; i++) {
-		vGoogleNews += "	 <tr>"
-		vGoogleNews += "	  <td>" + data.google.googleNewsCompArr[i] + "</td>"
-		vGoogleNews += "    <td> <a href='" + data.google.googleNewsHrefArr[i] + "'>" + data.google.googleNewsTitleArr[i] + "</a> </td>"
+		vGoogleNews += "  <tr>"
+		vGoogleNews += "	<td> <input type='checkbox' name='news_checkbox'> </td>"
+		vGoogleNews += "	<td>" + data.google.googleNewsCompArr[i] + "</td>"
+		vGoogleNews += "    <td> <a href='" + data.google.googleNewsHrefArr[i] + "' target='_blank'>" + data.google.googleNewsTitleArr[i] + "</a> </td>"
 		vGoogleNews += "    <td class='font'>" + data.google.googleNewsRegTmArr[i] + "</td>"
+		vGoogleNews += "  </tr>"
 	}
 	
 	vGoogleNews += "</table>"
@@ -310,6 +318,40 @@ function nullCheck(flag) {
 		return false;
 	}
 	return true;
+}
+
+/*
+ * CHECKED NEWS SCRAP FUNCTION
+ */
+ function scrapNews() {
+		var tdArr = new Array();
+		var checkbox = $("input[name=news_checkbox]:checked");
+		
+		checkbox.each(function(i) {
+		var tr = checkbox.parent().parent().eq(i);
+		var td = tr.children();
+		
+		var comp = td.eq(1).text();
+		var title = td.eq(2).text();
+		
+		var data = new Object(); 
+		
+		data.comp = comp;
+		data.title = title;
+		
+		tdArr.push(data);
+		});
+		
+	var jsonData = JSON.stringify(tdArr);	
+	
+	$.ajax({
+		type : 'get'
+		, url : '/seleniumhq/getScrapNews'
+		, data : {"data" : jsonData}
+		, success : function(data) {
+			
+		}
+	})
 }
 
 </script>
