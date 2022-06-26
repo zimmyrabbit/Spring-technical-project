@@ -72,7 +72,7 @@ public class CrawlingController {
 	public void getScraoNews(HttpServletRequest request) {
 		String data = request.getParameter("data");
 		
-		logger.info(data);
+		crawlingService.setScarpNews(data);
 	}
 	
 	

@@ -5,10 +5,6 @@
     
 <mapper namespace="kr.co.zimmyrabbit.crawling.dao.CrawlingDao">
 
-	<select id="test" resultType="String">
-		SELECT ENAME FROM emp
-		WHERE empno = 7839
-	</select>
 
 
 

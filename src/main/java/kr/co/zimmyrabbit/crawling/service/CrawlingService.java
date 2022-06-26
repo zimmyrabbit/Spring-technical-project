@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -302,4 +306,34 @@ public class CrawlingService {
     /*
      * GOOGLE NEWS SEARCH JSOUP CRAWLING <<END>>
      */
+    
+    /*
+     * INSERT SCRAP NEWS
+     */
+	public void setScarpNews(String data) {
+		
+		JSONParser parser = new JSONParser();
+		
+		try {
+			JSONArray jsonarray = (JSONArray) parser.parse(data);
+			
+			System.out.println(jsonarray.size());
+			
+			for(int i=0; i<jsonarray.size(); i++) {
+				JSONObject obj = (JSONObject) jsonarray.get(i);
+				String comp = (String) obj.get("comp");
+				String title = (String) obj.get("title");
+				String href = (String) obj.get("href");
+				
+				HashMap<String,String> map = new HashMap<String,String>();
+				map.put("comp", comp);
+				map.put("title", title);
+				map.put("href", href);
+				
+				crawlingDao.insertScrapNews(map);
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
 }

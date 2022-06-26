@@ -1,7 +1,9 @@
 package kr.co.zimmyrabbit.crawling.dao;
 
+import java.util.HashMap;
+
 public interface CrawlingDao {
 
-	public String test();
+	public void insertScrapNews(HashMap<String, String> map);
 
 }

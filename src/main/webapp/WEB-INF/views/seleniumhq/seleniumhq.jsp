@@ -8,6 +8,13 @@
 
 <style type="text/css">
 
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+body{
+  background: #f2f2f2;
+  font-family: 'Open Sans', sans-serif;
+}
+
 .parentNewsDiv{
     width: 95%;
     margin: 10px auto;
@@ -48,17 +55,85 @@
 	width : 10%;
 }
 
+.search_box_DIV {
+	text-align: center;
+}
+
+.search_box {
+	width:400px; 
+	height : 30px;
+	display:inline;
+  border: none;
+  border-bottom: 2px solid black;
+}
+
+.tree{
+  margin-top: 5px;
+}
+.tree, .tree ul{
+  list-style: none; /* 기본 리스트 스타일 제거 */
+  padding-left:10px;
+}
+.tree *:before{
+  width:15px;
+  height:15px;
+  display:inline-block;
+}
+.tree label{
+  cursor: pointer;
+  font-family: NotoSansKrMedium, sans-serif !important;
+  font-size: 14px;
+  color: #0055CC;
+}
+.tree label:hover{
+  color: #00AACC;
+}
+.tree label:before{
+  content: '+'
+}
+.tree label.lastTree:before{
+  content:'o';
+}
+.tree label:hover:before{
+  content: '+'
+}
+.tree label.lastTree:hover:before{
+  content:'o';
+}
+.tree input[type="checkbox"] {
+  display: none;
+}
+.tree input[type="checkbox"]:checked~ul {
+  display: none;
+}
+.tree input[type="checkbox"]:checked+label:before{
+  content: '-'
+}
+.tree input[type="checkbox"]:checked+label:hover:before{
+  content: '-'
+}
+
+.tree input[type="checkbox"]:checked+label.lastTree:before{
+  content: 'o';
+}
+.tree input[type="checkbox"]:checked+label.lastTree:hover:before{
+  content: 'o';
+}
 </style>
 
 <meta charset="UTF-8">
 <title>News Search Engine</title>
 </head>
 <body>
+
+<div class="search_box_DIV">
+	<input type="text" id="searchText" name="searchText" class="search_box" onkeypress="pressEnterKey(event)" placeholder="검색어 입력"/>
+	<button id="searchBtn" onclick="reqSearchText(0,1)">검색</button>
+</div>
+
 <div>
-<input type="text" id="searchText" name="searchText" style="width:400px; display:inline" onkeypress="pressEnterKey(event)"/>
-<button id="searchBtn" onclick="reqSearchText(0,1)">검색</button>
-<button id="initBtn" onclick="initSearch(0)">초기화</button>
-<button id="initBtn" onclick="scrapNews()">스크랩</button>
+	<button id="initBtn" onclick="initSearch(0)">초기화</button>
+	<button id="initBtn" onclick="scrapNews()">스크랩</button>
 </div>
 
 <div id="newsHead" class="parentNewsDiv newsHead">
@@ -68,21 +143,61 @@
 </div>
 
 <div id="newsBody" class="parentNewsDiv">
-
 	<div class="naverNewsDiv">
 		<div id="naverNewsBody">z</div>
-		<div id="naverNewsPaging"></div>
+		<div id="naverNewsPaging" class="newsHead"></div>
 	</div>
 	
 	<div class="daumNewsDiv">
 		<div id="daumNewsBody">z</div>
-		<div id="daumNewsPaging"></div>
+		<div id="daumNewsPaging" class="newsHead"></div>
 	</div>
 	
 	<div class="googleNewsDiv">
 		<div id="googleNewsBody">z</div>
-		<div id="googleNewsPaging"></div>
+		<div id="googleNewsPaging" class="newsHead"></div>
 	</div>
+</div>
+
+<div>
+	<ul class="tree">
+	  <li>
+	    <input type="checkbox" id="root">
+	    <label for="root">ROOT</label>
+	    <ul>
+	      <li>
+	        <input type="checkbox" id="node1">
+	        <label for="node1">node1</label>
+	      </li>
+	      <li>
+	        <input type="checkbox" id="node2">
+	        <label for="node2">node2</label>
+	        <ul>
+	          <li>
+	            <input type="checkbox" id="node21">
+	            <label for="node21" class="lastTree">node21</label>
+	          </li>
+	        </ul>
+	      <li>
+	        <input type="checkbox" id="node3">
+	        <label for="node3">node3</label>
+	        <ul>
+	          <li>
+	            <input type="checkbox" id="node31">
+	            <label for="node31" class="lastTree">node31</label>
+	          </li>
+	          <li>
+	            <input type="checkbox" id="node32">
+	            <label for="node32" class="lastTree">node32</label>
+	          <li>
+	            <input type="checkbox" id="node33">
+	            <label for="node33" class="lastTree">node33</label>
+	          </li>
+	        </ul>
+	      </li>
+	    </ul>
+	  </li>
+	</ul>
 </div>
 
 
@@ -333,11 +448,13 @@ function nullCheck(flag) {
 		
 		var comp = td.eq(1).text();
 		var title = td.eq(2).text();
+		var href = td.eq(2).children().attr("href");
 		
 		var data = new Object(); 
 		
 		data.comp = comp;
 		data.title = title;
+		data.href= href;
 		
 		tdArr.push(data);
 		});
