@@ -308,7 +308,7 @@ public class CrawlingService {
      */
     
     /*
-     * INSERT SCRAP NEWS
+     * INSERT SCRAP NEWS <<START>>
      */
 	public void setScarpNews(String data) {
 		
@@ -329,11 +329,14 @@ public class CrawlingService {
 				map.put("comp", comp);
 				map.put("title", title);
 				map.put("href", href);
-				
+				map.put("userid", "unnamed");
 				crawlingDao.insertScrapNews(map);
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}
+    /*
+     * INSERT SCRAP NEWS <<END>>
+     */
 }

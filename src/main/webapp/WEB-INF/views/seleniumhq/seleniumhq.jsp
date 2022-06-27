@@ -65,6 +65,7 @@ body{
 	display:inline;
   border: none;
   border-bottom: 2px solid black;
+  background: #f2f2f2;
 }
 
 .tree{
@@ -213,6 +214,8 @@ body{
  */
 function reqSearchText(siteflag, pageflag) {
 	
+	 openLoading();
+	 
 	var query = $("#searchText").val();
 	
 	if(!nullCheck(query)) {
@@ -245,6 +248,13 @@ function reqSearchText(siteflag, pageflag) {
 			if(siteflag == 0 || siteflag == 3) {
 				googleNewsSetting(data);
 			}
+			
+			closeLoading();
+		},
+		error : function(error) {
+			closeLoading();
+
+			alert("ERROR!");
 		}
 	})
 }
@@ -470,6 +480,40 @@ function nullCheck(flag) {
 		}
 	})
 }
+
+ /*
+  * LOADING POPUP OPEN
+  */
+ function openLoading() {
+	    var maskHeight = $(document).height();
+	    var maskWidth = window.document.body.clientWidth;
+	    
+	    var mask ="<div id='mask' style='position:absolute; z-index:9000; background-color:#000000; display:none; left:0; top:0;'></div>";
+
+	    var loadingImg ='';
+	    loadingImg += "<div id='loadingImg' style='position:absolute; top: calc(50% - (200px / 2)); width:100%; z-index:99999999;'>";
+	    loadingImg += " <img src='/resources/image/Spinner.gif' style='position: relative; display: block; margin: 0px auto;'/>";
+	    loadingImg += "</div>"; 
+
+	    $('body')
+	    		.append(mask)
+	    		.append(loadingImg)
+	    $('#mask').css({
+	            'width' : maskWidth,
+	            'height': maskHeight,
+	            'opacity' :'0.3'
+	    });
+	    $('#mask').show();  
+	    $('#loadingImg').show();
+}
+ 
+ /*
+  * LOADING POPUP CLOSE
+  */
+ function closeLoading() {
+     $('#mask, #loadingImg').hide();
+     $('#mask, #loadingImg').empty(); 
+ }
 
 </script>
 

@@ -5,7 +5,9 @@
     
 <mapper namespace="kr.co.zimmyrabbit.crawling.dao.CrawlingDao">
 
-
-
+	<insert id="insertScrapNews" parameterType="java.util.HashMap">
+		INSERT INTO dash_news_scrap (seq, newscomp, newstitle, newshref, registid)
+		VALUES (dash_news_scrap_seq.nextval,#{comp},#{title},#{href},#{userid})
+	</insert>
 
 </mapper>
