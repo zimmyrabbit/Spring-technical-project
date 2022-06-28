@@ -7,7 +7,22 @@
 
 	<insert id="insertScrapNews" parameterType="java.util.HashMap">
 		INSERT INTO dash_news_scrap (seq, newscomp, newstitle, newshref, registid)
-		VALUES (dash_news_scrap_seq.nextval,#{comp},#{title},#{href},#{userid})
+		VALUES (dash_news_scrap_seq.nextval,#{comp},#{title},#{href},#{registid})
 	</insert>
+	
+	<select id="getScrapListRoot" resultType="java.util.HashMap" parameterType="String">
+		SELECT DISTINCT TO_CHAR(REGISTDT, 'YYYY/MM/DD') as REGISTDT
+		FROM dash_news_scrap 
+		WHERE registid = #{registid}
+		GROUP BY REGISTDT 
+		order by registdt
+	</select>
+	
+	<select id="getScrapListNode" resultType="java.util.HashMap" parameterType="String">
+		SELECT seq, newscomp, newstitle, newshref, registid, TO_CHAR(REGISTDT, 'YYYY/MM/DD') as REGISTDT
+		FROM dash_news_scrap 
+		WHERE registid = #{registid}
+		order by registdt
+	</select>
 
 </mapper>

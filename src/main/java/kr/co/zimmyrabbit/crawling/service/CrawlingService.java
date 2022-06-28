@@ -11,6 +11,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
@@ -329,7 +330,7 @@ public class CrawlingService {
 				map.put("comp", comp);
 				map.put("title", title);
 				map.put("href", href);
-				map.put("userid", "unnamed");
+				map.put("registid", "unname");
 				crawlingDao.insertScrapNews(map);
 			}
 		} catch (ParseException e) {
@@ -339,4 +340,18 @@ public class CrawlingService {
     /*
      * INSERT SCRAP NEWS <<END>>
      */
+
+	public HashMap<String, Object> getScrapList(String registid) {
+		
+		List<HashMap<String,Object>> root = crawlingDao.getScrapListRoot(registid);
+		List<HashMap<String,Object>> node = crawlingDao.getScrapListNode(registid);
+		
+		System.out.println(node);
+		
+		HashMap<String,Object> map = new HashMap<>();
+		map.put("root", root);
+		map.put("node", node);
+		
+		return map;
+	}
 }

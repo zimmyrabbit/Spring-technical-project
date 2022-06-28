@@ -107,17 +107,17 @@ body{
 .tree input[type="checkbox"]:checked~ul {
   display: none;
 }
-.tree input[type="checkbox"]:checked+label:before{
+.tree input[type="checkbox"]:checked+label+a:before{
   content: '-'
 }
-.tree input[type="checkbox"]:checked+label:hover:before{
+.tree input[type="checkbox"]:checked+label+a:hover:before{
   content: '-'
 }
 
-.tree input[type="checkbox"]:checked+label.lastTree:before{
+.tree input[type="checkbox"]:checked+label+a.lastTree:before{
   content: 'o';
 }
-.tree input[type="checkbox"]:checked+label.lastTree:hover:before{
+.tree input[type="checkbox"]:checked+label+a.lastTree:hover:before{
   content: 'o';
 }
 </style>
@@ -161,41 +161,11 @@ body{
 </div>
 
 <div>
-	<ul class="tree">
+	<ul class="tree" id="scrapbox">
 	  <li>
-	    <input type="checkbox" id="root">
+	    <input type="checkbox" id="scrap">
 	    <label for="root">ROOT</label>
-	    <ul>
-	      <li>
-	        <input type="checkbox" id="node1">
-	        <label for="node1">node1</label>
-	      </li>
-	      <li>
-	        <input type="checkbox" id="node2">
-	        <label for="node2">node2</label>
-	        <ul>
-	          <li>
-	            <input type="checkbox" id="node21">
-	            <label for="node21" class="lastTree">node21</label>
-	          </li>
-	        </ul>
-	      <li>
-	        <input type="checkbox" id="node3">
-	        <label for="node3">node3</label>
-	        <ul>
-	          <li>
-	            <input type="checkbox" id="node31">
-	            <label for="node31" class="lastTree">node31</label>
-	          </li>
-	          <li>
-	            <input type="checkbox" id="node32">
-	            <label for="node32" class="lastTree">node32</label>
-	          <li>
-	            <input type="checkbox" id="node33">
-	            <label for="node33" class="lastTree">node33</label>
-	          </li>
-	        </ul>
-	      </li>
+	    <ul id="rootbox">  
 	    </ul>
 	  </li>
 	</ul>
@@ -204,6 +174,10 @@ body{
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
+
+$(document).ready(function() {
+	reqScrapList();
+})
 
 /*
  * [SEARCH ENGINE FUNCTION]
@@ -473,16 +447,16 @@ function nullCheck(flag) {
 	
 	$.ajax({
 		type : 'get'
-		, url : '/seleniumhq/getScrapNews'
+		, url : '/seleniumhq/setScrapNews'
 		, data : {"data" : jsonData}
 		, success : function(data) {
-			
+			reqScrapList();
 		}
 	})
 }
 
  /*
-  * LOADING POPUP OPEN
+  * LOADING POPUP OPEN FUNCTION
   */
  function openLoading() {
 	    var maskHeight = $(document).height();
@@ -508,13 +482,52 @@ function nullCheck(flag) {
 }
  
  /*
-  * LOADING POPUP CLOSE
+  * LOADING POPUP CLOSE FUNCTION
   */
  function closeLoading() {
      $('#mask, #loadingImg').hide();
      $('#mask, #loadingImg').empty(); 
  }
+ 
+ /*
+  * SCRAP BOOKMARK SELECT FUNCTION
+  */
+ function reqScrapList(siteflag, pageflag) {
+	$.ajax({
+		type : 'post'
+		, url : '/seleniumhq/getScrapList'
+		, data : {}
+		, success : function(data) {
+			
+			var root = "";
+			
+			for(var i=0; i<data.root.length; i++) {
+				root += "<li id='node" + i + "box'>"
+			    root +=    "<input type='checkbox' id='nodetitle" + i + "'>"
+			    root +=    "<label for='node" + i + "'>" + data.root[i].REGISTDT + "</label>"
+			    root +=    "<ul id='node" + data.root[i].REGISTDT + "'>"
+			    if(data.node.length > 0) {
+			    	for(var j=0; j<data.node.length; j++) {
+						if(data.node[j].REGISTDT == data.root[i].REGISTDT) {
+							root += "<li>";
+							root += "<input type='checkbox' id='node" + data.node[j].SEQ + "'>"
+							root += "<label for='node" + data.node[j].SEQ + "' class='lastTree'> <a href='" + data.node[j].NEWSHREF +"'>" + data.node[j].NEWSTITLE + "</a> </label>";
+							root += "</li>"
+						}
+			    	}
+			    }
+			    root +=    "</ul>"
+			    root += "</li>"
+			}
 
+			$("#rootbox").html(root);
+		},
+		error : function(error) {
+
+			alert("ERROR!");
+		}
+	})
+}
 </script>
 
 </body>
