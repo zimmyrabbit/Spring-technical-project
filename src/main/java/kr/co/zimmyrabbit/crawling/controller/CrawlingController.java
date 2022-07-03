@@ -87,6 +87,14 @@ public class CrawlingController {
 		return map;
 	}
 	
+	@RequestMapping(value="/seleniumhq/delNewsScrap", method=RequestMethod.GET)
+	public @ResponseBody void delNewsScrap(HttpServletRequest request) {
+		
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		
+		crawlingService.delNewsScrap(seq);
+	}
+	
 	
 	/*
 	 *  ======== <<개선사항>> ========

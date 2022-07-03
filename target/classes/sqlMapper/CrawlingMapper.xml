@@ -14,6 +14,7 @@
 		SELECT DISTINCT TO_CHAR(REGISTDT, 'YYYY/MM/DD') as REGISTDT
 		FROM dash_news_scrap 
 		WHERE registid = #{registid}
+		AND useyn = 'Y'
 		GROUP BY REGISTDT 
 		order by registdt
 	</select>
@@ -22,7 +23,14 @@
 		SELECT seq, newscomp, newstitle, newshref, registid, TO_CHAR(REGISTDT, 'YYYY/MM/DD') as REGISTDT
 		FROM dash_news_scrap 
 		WHERE registid = #{registid}
+		AND useyn = 'Y'
 		order by registdt
 	</select>
+	
+	<update id="deleteNewsScrap" parameterType="Integer">
+		update dash_news_scrap
+		set useyn = 'N'
+		WHERE seq = #{seq}
+	</update>
 
 </mapper>

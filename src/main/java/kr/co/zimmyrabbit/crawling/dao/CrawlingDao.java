@@ -11,4 +11,6 @@ public interface CrawlingDao {
 
 	public List<HashMap<String,Object>> getScrapListNode(String registid);
 
+	public void deleteNewsScrap(int seq);
+
 }

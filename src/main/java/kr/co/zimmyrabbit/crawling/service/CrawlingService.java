@@ -346,12 +346,15 @@ public class CrawlingService {
 		List<HashMap<String,Object>> root = crawlingDao.getScrapListRoot(registid);
 		List<HashMap<String,Object>> node = crawlingDao.getScrapListNode(registid);
 		
-		System.out.println(node);
-		
 		HashMap<String,Object> map = new HashMap<>();
 		map.put("root", root);
 		map.put("node", node);
 		
 		return map;
+	}
+
+	public void delNewsScrap(int seq) {
+		
+		crawlingDao.deleteNewsScrap(seq);
 	}
 }

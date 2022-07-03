@@ -48,7 +48,7 @@ body{
 }
 
 .font {
-	font-size: 5px;
+	font-size: 10px;
 }
 
 .RegTmArr {
@@ -107,19 +107,83 @@ body{
 .tree input[type="checkbox"]:checked~ul {
   display: none;
 }
-.tree input[type="checkbox"]:checked+label+a:before{
+.tree input[type="checkbox"]:checked+label:before{
   content: '-'
 }
-.tree input[type="checkbox"]:checked+label+a:hover:before{
+.tree input[type="checkbox"]:checked+label:hover:before{
   content: '-'
 }
 
-.tree input[type="checkbox"]:checked+label+a.lastTree:before{
+.tree input[type="checkbox"]:checked+label.lastTree:before{
   content: 'o';
 }
-.tree input[type="checkbox"]:checked+label+a.lastTree:hover:before{
+.tree input[type="checkbox"]:checked+label.lastTree:hover:before{
   content: 'o';
 }
+
+button {
+  background-color: #F9B514;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal .bg {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modalBox {
+  position: absolute;
+  background-color: #fff;
+  width: 800px;
+  height: 400px;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.modalBox button {
+  display: block;
+  width: 80px;
+  margin: 0 auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.newslink:link {
+	color : black;
+	text-decoration: none;
+}
+
+.newslink:hover {
+	color : blue;
+	font-size : 15px;
+}
+
+.scrapNewslink:link {
+	color : black;
+	text-decoration: none;
+}
+
+.scrapNewslink:hover {
+	color : blue;
+	text-decoration: none;
+}
+
 </style>
 
 <meta charset="UTF-8">
@@ -134,7 +198,8 @@ body{
 
 <div>
 	<button id="initBtn" onclick="initSearch(0)">초기화</button>
-	<button id="initBtn" onclick="scrapNews()">스크랩</button>
+	<button id="scrapBtn" onclick="scrapNews()">스크랩</button>
+	<button class="openBtn">팝업</button>
 </div>
 
 <div id="newsHead" class="parentNewsDiv newsHead">
@@ -145,38 +210,54 @@ body{
 
 <div id="newsBody" class="parentNewsDiv">
 	<div class="naverNewsDiv">
-		<div id="naverNewsBody">z</div>
+		<div id="naverNewsBody"></div>
 		<div id="naverNewsPaging" class="newsHead"></div>
 	</div>
 	
 	<div class="daumNewsDiv">
-		<div id="daumNewsBody">z</div>
+		<div id="daumNewsBody"></div>
 		<div id="daumNewsPaging" class="newsHead"></div>
 	</div>
 	
 	<div class="googleNewsDiv">
-		<div id="googleNewsBody">z</div>
+		<div id="googleNewsBody"></div>
 		<div id="googleNewsPaging" class="newsHead"></div>
 	</div>
 </div>
 
-<div>
-	<ul class="tree" id="scrapbox">
-	  <li>
-	    <input type="checkbox" id="scrap">
-	    <label for="root">ROOT</label>
-	    <ul id="rootbox">  
-	    </ul>
-	  </li>
-	</ul>
+<div class="modal hidden">
+	<div class="bg"></div>
+	<div class="modalBox">
+		<ul class="tree" id="scrapbox">
+		  <li>
+		    <input type="checkbox" id="scrap">
+		    <label for="root">ROOT</label>
+		    <ul id="rootbox">  
+		    </ul>
+		  </li>
+		</ul>
+		<div class="closeBtn">닫기</div>
+	</div>
 </div>
-
-
+</body>
 <script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function() {
 	reqScrapList();
+	
+  	const open = () => {
+  	  document.querySelector(".modal").classList.remove("hidden");
+ 	 }
+
+ 	 const close = () => {
+ 	   document.querySelector(".modal").classList.add("hidden");
+ 	 }
+
+  	document.querySelector(".openBtn").addEventListener("click", open);
+ 	 document.querySelector(".closeBtn").addEventListener("click", close);
+ 	 document.querySelector(".bg").addEventListener("click", close);
+ 	 
 })
 
 /*
@@ -255,7 +336,7 @@ function reqSearchText(siteflag, pageflag) {
 		vNaverNews += "	 <tr>"
 		vNaverNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
 		vNaverNews += "	  <td> </td>"
-		vNaverNews += "   <td> <a href='" + vNaverNewsItem.items[i].link + "' target='_blank'>" + vNaverNewsItem.items[i].title + "</a> </td>"
+		vNaverNews += "   <td> <a class='newslink' href='" + vNaverNewsItem.items[i].link + "' target='_blank'>" + vNaverNewsItem.items[i].title + "</a> </td>"
 		vNaverNews += "	  <td>" + date + "</td>"
 	}
 	
@@ -281,7 +362,7 @@ function reqSearchText(siteflag, pageflag) {
  		vNaverNews += "	 <tr>"
  		vNaverNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
  		vNaverNews += "	  <td>" + data.naver.NaverNewsCompArr[i] + "</td>"
- 		vNaverNews += "   <td> <a href='" + data.naver.NaverNewsHrefArr[i] + "' target='_blank'>" + data.naver.NaverNewsTitleArr[i] + "</a> </td>"
+ 		vNaverNews += "   <td> <a class='newslink' href='" + data.naver.NaverNewsHrefArr[i] + "' target='_blank'>" + data.naver.NaverNewsTitleArr[i] + "</a> </td>"
  		vNaverNews += "   <td class='font'>" + data.naver.NaverNewsRegTmArr[i] + "</td>"
  		vNaverNews += "  </tr>"
  	}
@@ -292,7 +373,7 @@ function reqSearchText(siteflag, pageflag) {
  	
  	
  	for(var j=1; j<11; j++) {
- 		vNaverPaging += "<a onclick=reqSearchText(1," + j +")>" + j + " </a>";
+ 		vNaverPaging += "<a class='newslink' onclick=reqSearchText(1," + j +") href='#'>" + j + " </a>";
  	}
  	
  	$("#naverNewsPaging").html(vNaverPaging);
@@ -315,7 +396,7 @@ function daumNewsSetting(data) {
 		vDaumNews += "	 <tr>"
 		vDaumNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
 		vDaumNews += "	  <td>" + data.daum.daumNewsCompArr[i] + "</td>"
-		vDaumNews += "    <td> <a href='" + data.daum.daumNewsHrefArr[i] + "' target='_blank'>" + data.daum.daumNewsTitleArr[i] + "</a> </td>"
+		vDaumNews += "    <td> <a class='newslink' href='" + data.daum.daumNewsHrefArr[i] + "' target='_blank'>" + data.daum.daumNewsTitleArr[i] + "</a> </td>"
 		vDaumNews += "    <td class='font'>" + data.daum.daumNewsRegTmArr[i] + "</td>"
 		vDaumNews += "   </tr>"
 	}
@@ -326,7 +407,7 @@ function daumNewsSetting(data) {
 
 	
 	for(var j=1; j<11; j++) {
-		vDaumPaging += "<a onclick=reqSearchText(2," + j +")>" + j + " </a>";
+		vDaumPaging += "<a class='newslink' onclick=reqSearchText(2," + j +") href='#'>" + j + " </a>";
 	}
 	
 	$("#daumNewsPaging").html(vDaumPaging);
@@ -349,7 +430,7 @@ function googleNewsSetting(data) {
 		vGoogleNews += "  <tr>"
 		vGoogleNews += "	<td> <input type='checkbox' name='news_checkbox'> </td>"
 		vGoogleNews += "	<td>" + data.google.googleNewsCompArr[i] + "</td>"
-		vGoogleNews += "    <td> <a href='" + data.google.googleNewsHrefArr[i] + "' target='_blank'>" + data.google.googleNewsTitleArr[i] + "</a> </td>"
+		vGoogleNews += "    <td> <a class='newslink' href='" + data.google.googleNewsHrefArr[i] + "' target='_blank'>" + data.google.googleNewsTitleArr[i] + "</a> </td>"
 		vGoogleNews += "    <td class='font'>" + data.google.googleNewsRegTmArr[i] + "</td>"
 		vGoogleNews += "  </tr>"
 	}
@@ -360,7 +441,7 @@ function googleNewsSetting(data) {
 	
 	
 	for(var j=1; j<11; j++) {
-		vGooglePaging += "<a onclick=reqSearchText(3," + j +")>" + j + " </a>";
+		vGooglePaging += "<a class='newslink' onclick=reqSearchText(3," + j +") href='#'>" + j + " </a>";
 	}
 	
 	$("#googleNewsPaging").html(vGooglePaging);
@@ -492,7 +573,7 @@ function nullCheck(flag) {
  /*
   * SCRAP BOOKMARK SELECT FUNCTION
   */
- function reqScrapList(siteflag, pageflag) {
+ function reqScrapList() {
 	$.ajax({
 		type : 'post'
 		, url : '/seleniumhq/getScrapList'
@@ -504,14 +585,15 @@ function nullCheck(flag) {
 			for(var i=0; i<data.root.length; i++) {
 				root += "<li id='node" + i + "box'>"
 			    root +=    "<input type='checkbox' id='nodetitle" + i + "'>"
-			    root +=    "<label for='node" + i + "'>" + data.root[i].REGISTDT + "</label>"
+			    root +=    "<label for='nodetitle" + i + "'>" + data.root[i].REGISTDT + "</label>"
 			    root +=    "<ul id='node" + data.root[i].REGISTDT + "'>"
 			    if(data.node.length > 0) {
 			    	for(var j=0; j<data.node.length; j++) {
 						if(data.node[j].REGISTDT == data.root[i].REGISTDT) {
 							root += "<li>";
 							root += "<input type='checkbox' id='node" + data.node[j].SEQ + "'>"
-							root += "<label for='node" + data.node[j].SEQ + "' class='lastTree'> <a href='" + data.node[j].NEWSHREF +"'>" + data.node[j].NEWSTITLE + "</a> </label>";
+							root += "<label for='node" + data.node[j].SEQ + "' class='lastTree'> <a class='scrapNewslink' href='" + data.node[j].NEWSHREF +"'>" + data.node[j].NEWSTITLE + "</a> </label>";
+							root += "<a style='font-size : small;' href='#' class='scrapNewslink' onclick='deleteNewsScrap(" + data.node[j].SEQ + ")'> x </a>"
 							root += "</li>"
 						}
 			    	}
@@ -527,8 +609,23 @@ function nullCheck(flag) {
 			alert("ERROR!");
 		}
 	})
-}
+ }
+ 
+ function deleteNewsScrap(seq) {
+		$.ajax({
+			type : 'get'
+			, url : '/seleniumhq/delNewsScrap'
+			, data : {"seq" : seq}
+			, success : function(data) {
+				reqScrapList();
+			},
+			error : function(error) {
+
+				alert("ERROR!");
+			}
+		})
+	 
+ }
 </script>
 
-</body>
 </html>
