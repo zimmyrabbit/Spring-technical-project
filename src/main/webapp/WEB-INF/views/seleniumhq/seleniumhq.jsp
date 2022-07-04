@@ -184,6 +184,33 @@ button {
 	text-decoration: none;
 }
 
+#toast {
+    position: absolute;
+    left: 50%;
+    top:35%;
+    width:200px;
+    height:40px;
+    padding: 15px 20px;
+    transform: translate(-50%, 10px);
+    border-radius: 30px;
+    overflow: hidden;
+    font-size: .8rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .5s, visibility .5s, transform .5s;
+    background: rgba(0, 0, 0, .35);
+    color: #fff;
+    z-index: 10000;
+    text-align:center;
+    line-height: 40px;
+}
+
+#toast.reveal {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0)
+}
+
 </style>
 
 <meta charset="UTF-8">
@@ -199,7 +226,7 @@ button {
 <div>
 	<button id="initBtn" onclick="initSearch(0)">초기화</button>
 	<button id="scrapBtn" onclick="scrapNews()">스크랩</button>
-	<button class="openBtn">팝업</button>
+	<button class="openBtn" onclick="reqScrapList()">북마크</button>
 </div>
 
 <div id="newsHead" class="parentNewsDiv newsHead">
@@ -239,25 +266,27 @@ button {
 		<div class="closeBtn">닫기</div>
 	</div>
 </div>
+
+<div id="toast"></div>
 </body>
 <script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function() {
-	reqScrapList();
-	
+	//scrap modal open attr
   	const open = () => {
   	  document.querySelector(".modal").classList.remove("hidden");
- 	 }
+  	} 
 
- 	 const close = () => {
+  	//scrap modal close attr
+ 	const close = () => {
  	   document.querySelector(".modal").classList.add("hidden");
- 	 }
-
+ 	}
+	
+ 	//scrap modal btn 
   	document.querySelector(".openBtn").addEventListener("click", open);
- 	 document.querySelector(".closeBtn").addEventListener("click", close);
- 	 document.querySelector(".bg").addEventListener("click", close);
- 	 
+ 	document.querySelector(".closeBtn").addEventListener("click", close);
+ 	document.querySelector(".bg").addEventListener("click", close);
 })
 
 /*
@@ -269,16 +298,14 @@ $(document).ready(function() {
  */
 function reqSearchText(siteflag, pageflag) {
 	
-	 openLoading();
-	 
 	var query = $("#searchText").val();
 	
 	if(!nullCheck(query)) {
-		if(param == 1) {
-			alert("검색어를 입력해 주세요.");
-			return;
-		}
+		toast("검색어를 입력해 주세요.");
+		return;
 	}
+	
+	openLoading();
 	
 	$.ajax({
 		type : 'post'
@@ -336,7 +363,7 @@ function reqSearchText(siteflag, pageflag) {
 		vNaverNews += "	 <tr>"
 		vNaverNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
 		vNaverNews += "	  <td> </td>"
-		vNaverNews += "   <td> <a class='newslink' href='" + vNaverNewsItem.items[i].link + "' target='_blank'>" + vNaverNewsItem.items[i].title + "</a> </td>"
+		vNaverNews += "   <td> <a class='newslink' id='" + vNaverNewsItem.items[i].link + "' onclick=newsPopup(this.id)>" + vNaverNewsItem.items[i].title + "</a> </td>"
 		vNaverNews += "	  <td>" + date + "</td>"
 	}
 	
@@ -362,7 +389,7 @@ function reqSearchText(siteflag, pageflag) {
  		vNaverNews += "	 <tr>"
  		vNaverNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
  		vNaverNews += "	  <td>" + data.naver.NaverNewsCompArr[i] + "</td>"
- 		vNaverNews += "   <td> <a class='newslink' href='" + data.naver.NaverNewsHrefArr[i] + "' target='_blank'>" + data.naver.NaverNewsTitleArr[i] + "</a> </td>"
+ 		vNaverNews += "   <td> <a class='newslink' id='" + data.naver.NaverNewsHrefArr[i] + "' onclick=newsPopup(this.id)>" + data.naver.NaverNewsTitleArr[i] + "</a> </td>"
  		vNaverNews += "   <td class='font'>" + data.naver.NaverNewsRegTmArr[i] + "</td>"
  		vNaverNews += "  </tr>"
  	}
@@ -396,7 +423,7 @@ function daumNewsSetting(data) {
 		vDaumNews += "	 <tr>"
 		vDaumNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
 		vDaumNews += "	  <td>" + data.daum.daumNewsCompArr[i] + "</td>"
-		vDaumNews += "    <td> <a class='newslink' href='" + data.daum.daumNewsHrefArr[i] + "' target='_blank'>" + data.daum.daumNewsTitleArr[i] + "</a> </td>"
+		vDaumNews += "    <td> <a class='newslink' id='" + data.daum.daumNewsHrefArr[i] + "' onclick=newsPopup(this.id)>" + data.daum.daumNewsTitleArr[i] + "</a> </td>"
 		vDaumNews += "    <td class='font'>" + data.daum.daumNewsRegTmArr[i] + "</td>"
 		vDaumNews += "   </tr>"
 	}
@@ -404,7 +431,6 @@ function daumNewsSetting(data) {
 	vDaumNews += "</table>"
 		
 	$("#daumNewsBody").html(vDaumNews);
-
 	
 	for(var j=1; j<11; j++) {
 		vDaumPaging += "<a class='newslink' onclick=reqSearchText(2," + j +") href='#'>" + j + " </a>";
@@ -430,7 +456,7 @@ function googleNewsSetting(data) {
 		vGoogleNews += "  <tr>"
 		vGoogleNews += "	<td> <input type='checkbox' name='news_checkbox'> </td>"
 		vGoogleNews += "	<td>" + data.google.googleNewsCompArr[i] + "</td>"
-		vGoogleNews += "    <td> <a class='newslink' href='" + data.google.googleNewsHrefArr[i] + "' target='_blank'>" + data.google.googleNewsTitleArr[i] + "</a> </td>"
+		vGoogleNews += "    <td> <a class='newslink' id='" + data.google.googleNewsHrefArr[i] + "' onclick=newsPopup(this.id)>" + data.google.googleNewsTitleArr[i] + "</a> </td>"
 		vGoogleNews += "    <td class='font'>" + data.google.googleNewsRegTmArr[i] + "</td>"
 		vGoogleNews += "  </tr>"
 	}
@@ -496,6 +522,8 @@ function nullCheck(flag) {
 		return false;
 	} else if (flag === null) {
 		return false;
+	} else if (flag === 0) {
+		return false;
 	}
 	return true;
 }
@@ -507,13 +535,19 @@ function nullCheck(flag) {
 		var tdArr = new Array();
 		var checkbox = $("input[name=news_checkbox]:checked");
 		
+		if(!nullCheck(checkbox.length)) {
+			toast("스크랩 하실 기사를 선택해 주세요.");
+			return;
+		}
+		
 		checkbox.each(function(i) {
 		var tr = checkbox.parent().parent().eq(i);
 		var td = tr.children();
 		
 		var comp = td.eq(1).text();
 		var title = td.eq(2).text();
-		var href = td.eq(2).children().attr("href");
+		var href = td.eq(2).children().attr("id");
+		//var href = td.eq(2).children().attr("href");
 		
 		var data = new Object(); 
 		
@@ -531,7 +565,8 @@ function nullCheck(flag) {
 		, url : '/seleniumhq/setScrapNews'
 		, data : {"data" : jsonData}
 		, success : function(data) {
-			reqScrapList();
+			$("input[type=checkbox]").prop("checked", false);
+			toast("스크랩 되었습니다.");
 		}
 	})
 }
@@ -592,7 +627,8 @@ function nullCheck(flag) {
 						if(data.node[j].REGISTDT == data.root[i].REGISTDT) {
 							root += "<li>";
 							root += "<input type='checkbox' id='node" + data.node[j].SEQ + "'>"
-							root += "<label for='node" + data.node[j].SEQ + "' class='lastTree'> <a class='scrapNewslink' href='" + data.node[j].NEWSHREF +"'>" + data.node[j].NEWSTITLE + "</a> </label>";
+							root += "<label for='node" + data.node[j].SEQ + "' class='lastTree'> <a class='scrapNewslink' id='" + data.node[j].NEWSHREF + "' onclick=newsPopup(this.id)>" + data.node[j].NEWSTITLE + "</a> </label>";
+							//root += "<label for='node" + data.node[j].SEQ + "' class='lastTree'> <a class='scrapNewslink' href='" + data.node[j],NEWSHREF +"'>" + data.node[j].NEWSTITLE + "</a> </label>";
 							root += "<a style='font-size : small;' href='#' class='scrapNewslink' onclick='deleteNewsScrap(" + data.node[j].SEQ + ")'> x </a>"
 							root += "</li>"
 						}
@@ -611,6 +647,9 @@ function nullCheck(flag) {
 	})
  }
  
+ /*
+  * BOOKMARK DELETE FUNCTION
+  */
  function deleteNewsScrap(seq) {
 		$.ajax({
 			type : 'get'
@@ -625,6 +664,33 @@ function nullCheck(flag) {
 			}
 		})
 	 
+ }
+ 
+ /*
+  * URL CLICK NEW POPUP OPEN FUNCTION
+  */
+ var cnt = 0;
+ function newsPopup(url) {
+	 cnt++;
+	 window.open(url,"news" + cnt,"width=1500, height=1000, top=10, left=10");
+ }
+ 
+ /*
+  * SCRAP SUCCESS TOAST POPUP
+  */
+ let removeToast;
+ function toast(string) {
+     const toast = document.getElementById("toast");
+
+     toast.classList.contains("reveal") ?
+         (clearTimeout(removeToast), removeToast = setTimeout(function () {
+             document.getElementById("toast").classList.remove("reveal")
+         }, 1000)) :
+         removeToast = setTimeout(function () {
+             document.getElementById("toast").classList.remove("reveal")
+         }, 2000)
+     toast.classList.add("reveal"),
+         toast.innerText = string
  }
 </script>
 

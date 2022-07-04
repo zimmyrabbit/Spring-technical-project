@@ -24,7 +24,7 @@
 		FROM dash_news_scrap 
 		WHERE registid = #{registid}
 		AND useyn = 'Y'
-		order by registdt
+		order by registdt, seq
 	</select>
 	
 	<update id="deleteNewsScrap" parameterType="Integer">
