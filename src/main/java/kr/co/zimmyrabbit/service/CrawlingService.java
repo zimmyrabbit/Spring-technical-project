@@ -1,4 +1,4 @@
-package kr.co.zimmyrabbit.crawling.service;
+package kr.co.zimmyrabbit.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.co.zimmyrabbit.crawling.dao.CrawlingDao;
+import kr.co.zimmyrabbit.dao.CrawlingDao;
 
 @Service
 public class CrawlingService {

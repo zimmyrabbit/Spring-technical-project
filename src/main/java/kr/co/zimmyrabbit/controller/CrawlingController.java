@@ -1,4 +1,4 @@
-package kr.co.zimmyrabbit.crawling.controller;
+package kr.co.zimmyrabbit.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.co.zimmyrabbit.crawling.service.CrawlingService;
+import kr.co.zimmyrabbit.service.CrawlingService;
 
 @Controller
 public class CrawlingController {
@@ -94,42 +94,5 @@ public class CrawlingController {
 		
 		crawlingService.delNewsScrap(seq);
 	}
-	
-	
-	/*
-	 *  ======== <<개선사항>> ========
-	 *  
-	 *  1. 뉴스 기사 작성한 회사(?)명 가져오기
-	 *  	-> 네이버 API에서는 제공해주는게 없다...
-	 *  	-> 구글, 다음은 크롤링으로 가져왔음
-	 *  	-> 네이버도 크롤링으로 바꿔야하나 -> 네이버 크롤링도 일단 만들어둠
-	 *  
-	 *  2. 뉴스 기사 작성한 시간 가져오기
-	 *  	-> NAVER :
-	 *  	-> DAUM :
-	 *  		하루 이내 기사 : xx분 전 , xx 시간 전 
-	 *  		하루 이후 기사 : 2022.xx.xx
-	 *  	-> GOOGLE : 
-	 *  		하루 이내 기사 : xx분 전 , xx 시간 전
-	 *  		하루 이후 기사 : x일 전
-	 *  
-	 *  3. UI 디자인 
-	 *  	-> INPUT , BUTTON 태그 디자인 찾아보기
-	 *  	-> 네이버, 다음, 구글 기사별로 모으기
-	 *  	-> 10개씩 보이도록 페이징 처리를 할까
-	 *  
-	 *  4. 자바스크립트 타이머
-	 *  	-> 예를들어 5분정도마다 기사 갱신되도록
-	 *  	-> 타이머초기화 버튼 or 검색버튼 누르면 즉시 갱신
-	 *  
-	 *  5. 웹 WAS 서버에 올리는 방안
-	 *  
-	 *  6. .EXE 실행파일로 만드는방법
-	 *  	-> JAVA : SWING , AWT 등 사용 ??
-	 *  	-> C# 으로 생성??
-	 *  
-	 *  7. 기사 스크랩 및 저장기능 DB연결 필요
-	 *  
-	 */
 	
 }

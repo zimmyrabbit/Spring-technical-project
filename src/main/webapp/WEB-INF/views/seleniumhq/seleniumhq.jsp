@@ -122,10 +122,11 @@ body{
 }
 
 button {
-  background-color: #F9B514;
+  background-color: #101B41;
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
+  color: white;
 }
 
 .modal {

@@ -1,4 +1,4 @@
-package kr.co.zimmyrabbit.crawling.dao;
+package kr.co.zimmyrabbit.dao;
 
 import java.util.HashMap;
 import java.util.List;
