@@ -219,6 +219,11 @@ button {
 </head>
 <body>
 
+<p>
+ <label for="Timer">남은 시간:</label>
+ <input id="Timer" type="text" value="" readonly/>
+</p>
+
 <div class="search_box_DIV">
 	<input type="text" id="searchText" name="searchText" class="search_box" onkeypress="pressEnterKey(event)" placeholder="검색어 입력"/>
 	<button id="searchBtn" onclick="reqSearchText(0,1)">검색</button>
@@ -288,6 +293,8 @@ $(document).ready(function() {
   	document.querySelector(".openBtn").addEventListener("click", open);
  	document.querySelector(".closeBtn").addEventListener("click", close);
  	document.querySelector(".bg").addEventListener("click", close);
+ 	
+ 	startTimer();
 })
 
 /*
@@ -297,9 +304,15 @@ $(document).ready(function() {
  *         	2 : DAUM
  *         	3 : GOOGLE
  */
-function reqSearchText(siteflag, pageflag) {
+function reqSearchText(siteflag, pageflag, saveSearch) {
 	
-	var query = $("#searchText").val();
+	var query = "" 
+	 
+	if(nullCheck(saveSearch)) {
+		query = saveSearch;	
+	} else {
+		query = $("#searchText").val();
+	}
 	
 	if(!nullCheck(query)) {
 		toast("검색어를 입력해 주세요.");
@@ -319,17 +332,17 @@ function reqSearchText(siteflag, pageflag) {
 			// NAVER NEWS SETTING
 			if(siteflag == 0 || siteflag == 1) {
 				//naverAPINewsSetting(data);
-				naverNewsSetting(data);
+				naverNewsSetting(data,query);
 			}
 			
 			// DAUM NEWS SETTING	
 			if(siteflag == 0 || siteflag == 2) {
-				daumNewsSetting(data);
+				daumNewsSetting(data,query);
 			}
 			
 			// GOOGLE NEWS SETTING
 			if(siteflag == 0 || siteflag == 3) {
-				googleNewsSetting(data);
+				googleNewsSetting(data,query);
 			}
 			
 			closeLoading();
@@ -376,7 +389,7 @@ function reqSearchText(siteflag, pageflag) {
  /*
   * NAVER NEWS SETTING FUNCTION
   */
- function naverNewsSetting(data) {
+ function naverNewsSetting(data,query) {
  	
  	initSearch(1);
  	
@@ -401,7 +414,7 @@ function reqSearchText(siteflag, pageflag) {
  	
  	
  	for(var j=1; j<11; j++) {
- 		vNaverPaging += "<a class='newslink' onclick=reqSearchText(1," + j +") href='#'>" + j + " </a>";
+ 		vNaverPaging += "<a class='newslink' onclick=reqSearchText(1," + j +",'" + query + "') href='#'>" + j + " </a>";
  	}
  	
  	$("#naverNewsPaging").html(vNaverPaging);
@@ -410,7 +423,7 @@ function reqSearchText(siteflag, pageflag) {
 /*
  * DAUM NEWS SETTING FUNCTION
  */
-function daumNewsSetting(data) {
+function daumNewsSetting(data,query) {
 	
 	initSearch(2);
 	
@@ -434,7 +447,7 @@ function daumNewsSetting(data) {
 	$("#daumNewsBody").html(vDaumNews);
 	
 	for(var j=1; j<11; j++) {
-		vDaumPaging += "<a class='newslink' onclick=reqSearchText(2," + j +") href='#'>" + j + " </a>";
+		vDaumPaging += "<a class='newslink' onclick=reqSearchText(2," + j +",'" + query + "') href='#'>" + j + " </a>";
 	}
 	
 	$("#daumNewsPaging").html(vDaumPaging);
@@ -443,7 +456,7 @@ function daumNewsSetting(data) {
 /*
  * GOOGLE NEWS SETTING FUNCTION
  */
-function googleNewsSetting(data) {
+function googleNewsSetting(data,query) {
 
 	initSearch(3);
 	
@@ -468,7 +481,7 @@ function googleNewsSetting(data) {
 	
 	
 	for(var j=1; j<11; j++) {
-		vGooglePaging += "<a class='newslink' onclick=reqSearchText(3," + j +") href='#'>" + j + " </a>";
+		vGooglePaging += "<a class='newslink' onclick=reqSearchText(3," + j +",'" + query + "') href='#'>" + j + " </a>";
 	}
 	
 	$("#googleNewsPaging").html(vGooglePaging);
@@ -693,6 +706,47 @@ function nullCheck(flag) {
      toast.classList.add("reveal"),
          toast.innerText = string
  }
+ 
+ 
+ /*
+  * TIMER SETTING FUNCTION
+  */
+ function startTimer() {
+	 
+ 	var Timer = document.getElementById('Timer');
+ 	var time = 10000;
+ 	//var time = 입력한 분 * 60000;
+ 	var min=1;
+ 	//var min = 입력한 분
+ 	var sec=10;
+ 	//var sec = 60;
+
+ 	Timer.value=min+":"+'00'; 
+
+    setInterval(function(){
+        time=time-1000;
+        min=time/(60*1000);
+
+       if(sec >= 10){
+            sec=sec-1;
+            Timer.value=Math.floor(min)+' : '+sec;
+       } else if(sec < 10 && sec > 0) {
+           sec=sec-1;
+           Timer.value=Math.floor(min)+' : 0'+sec;
+       } else if(sec === 0) {
+	  		sec=60;
+	       	Timer.value=Math.floor(min)+' : '+'00'
+       }
+        
+       if(min === 0 && sec === 0) {
+    	   reqSearchText(0,1,'손흥민');
+		   time = 10000;
+		   min = 1;
+		   sec = 10;
+       } 
+    },1000);
+ }
+  
 </script>
 
 </html>
