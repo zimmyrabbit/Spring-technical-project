@@ -222,6 +222,9 @@ button {
 <p>
  <label for="Timer">남은 시간:</label>
  <input id="Timer" type="text" value="" readonly/>
+ <input id="setTime" type="text" value="" placeholder="timer 주기"/>
+ <input id="keyword" type="text" value="" placeholder="키워드"/>
+ <button id="timerStartBtn" onclick="startTimer()">시작</button>
 </p>
 
 <div class="search_box_DIV">
@@ -294,7 +297,8 @@ $(document).ready(function() {
  	document.querySelector(".closeBtn").addEventListener("click", close);
  	document.querySelector(".bg").addEventListener("click", close);
  	
- 	startTimer();
+ 	//timer start
+ 	//startTimer();
 })
 
 /*
@@ -713,12 +717,25 @@ function nullCheck(flag) {
   */
  function startTimer() {
 	 
+	 var settime = $("#setTime").val()
+	 var keyword = $("#keyword").val()
+	 
+	 if(!nullCheck(settime)) {
+		 toast("timer주기를 입력해 주세요");
+		 return;
+	 } else if (!nullCheck(keyword)) {
+		 toast("키워드를 지정해 주세요");
+		 return;
+	 }
+	 
+	reqSearchText(0,1,keyword);
+	 
  	var Timer = document.getElementById('Timer');
- 	var time = 10000;
+ 	var time = parseInt(settime) * 60000
  	//var time = 입력한 분 * 60000;
- 	var min=1;
+ 	var min = parseInt(settime);
  	//var min = 입력한 분
- 	var sec=10;
+ 	var sec = 60;
  	//var sec = 60;
 
  	Timer.value=min+":"+'00'; 
@@ -739,10 +756,10 @@ function nullCheck(flag) {
        }
         
        if(min === 0 && sec === 0) {
-    	   reqSearchText(0,1,'손흥민');
-		   time = 10000;
-		   min = 1;
-		   sec = 10;
+    	   reqSearchText(0,1,keyword);
+		   time = parseInt(settime) * 60000;
+		   min = parseInt(settime);
+		   sec = 60;
        } 
     },1000);
  }
