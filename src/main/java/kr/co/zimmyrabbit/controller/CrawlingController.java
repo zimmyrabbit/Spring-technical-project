@@ -1,9 +1,11 @@
 package kr.co.zimmyrabbit.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +30,7 @@ public class CrawlingController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping(value="/seleniumhq/seleniumhq", method=RequestMethod.GET)
-	public void SeleniumhqMain() {}
+	public void SeleniumhqMain(){}
 	
 	@RequestMapping(value="/seleniumhq/seleniumhq", method=RequestMethod.POST)
 	@ResponseBody
