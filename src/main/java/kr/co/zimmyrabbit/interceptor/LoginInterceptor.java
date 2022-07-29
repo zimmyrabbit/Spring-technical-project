@@ -14,7 +14,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 
-		HashMap<String,Object> sessionInfo = (HashMap<String,Object>) request.getSession().getAttribute("userSession");
+		HashMap<String,Object> sessionInfo = (HashMap<String,Object>) request.getSession().getAttribute("loginSession");
 		
 		if(sessionInfo != null) {
 			return true;

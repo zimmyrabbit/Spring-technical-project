@@ -30,9 +30,9 @@
 	
 	<context:component-scan base-package="kr.co.zimmyrabbit" />
 	
+	<!-- Interceptor -->
 	<interceptors>
 		<interceptor>
-			<!-- 인터셉터가 적용될 URL -->
 			<mapping path="/seleniumhq/**"/>
 			<exclude-mapping path=""/>
 			<beans:bean class="kr.co.zimmyrabbit.interceptor.LoginInterceptor"/>

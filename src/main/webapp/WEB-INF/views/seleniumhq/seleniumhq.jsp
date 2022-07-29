@@ -222,8 +222,8 @@ button {
 <p>
  <label for="Timer">남은 시간:</label>
  <input id="Timer" type="text" value="" readonly/>
- <input id="setTime" type="text" value="" placeholder="timer 주기"/>
- <input id="keyword" type="text" value="" placeholder="키워드"/>
+ <input id="setTime" type="text" value="${sessionScope.loginSession.TIMER}" placeholder="timer 주기"/>
+ <input id="keyword" type="text" value="손흥민" placeholder="키워드"/>
  <button id="timerStartBtn" onclick="startTimer()">시작</button>
 </p>
 
@@ -299,6 +299,9 @@ $(document).ready(function() {
  	
  	//timer start
  	//startTimer();
+ 	if($("#setTime").value != "") {
+ 		startTimer();
+ 	}
 })
 
 /*

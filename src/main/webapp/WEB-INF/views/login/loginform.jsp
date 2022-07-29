@@ -117,26 +117,14 @@ body {
 	<label for="pw">비밀번호</label><br>
 	<input type="password" id="pw" name="pw" />
 
-	<label for="autologin">자동 로그인</label>
-	<input type="checkbox" id="autologin" name="autologin" />
-
-	<label for="rememberid">아이디 저장</label>
-	<input type="checkbox" id="rememberid" name="rememberid" /> <br>
-
 	<span id="loginspan"></span>
-
+	<div style="border-top: 1px solid #A48654;"></div>
+	
 	<input type="submit" id="submit" value="login"/>
-
-	<div style="border-top: 1px solid #A48654;">
-
-	<a href="/login/terms" class="link">회원가입</a>
-	<span class="stick">│</span>
-	<a href="/login/findid" class="link">아이디 찾기</a>
-	<span class="stick">│</span>
-	<a href="/login/findpw" class="link">비밀번호 찾기</a>
-</div>
-
 </form>
+
+
+
 
 
 </body>
