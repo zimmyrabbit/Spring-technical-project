@@ -72,19 +72,21 @@ public class CrawlingController {
 	
 	@RequestMapping(value="/seleniumhq/setScrapNews", method=RequestMethod.GET)
 	@ResponseBody
-	public void setScraoNews(HttpServletRequest request) {
+	public void setScraoNews(HttpServletRequest request, HttpSession session) {
+		
+		HashMap<String,Object> sessionInfo = (HashMap<String,Object>) session.getAttribute("loginSession");
+		
 		String data = request.getParameter("data");
 		
-		crawlingService.setScarpNews(data);
+		crawlingService.setScarpNews(data,String.valueOf(sessionInfo.get("SEQ")));
 	}
 	
 	@RequestMapping(value="/seleniumhq/getScrapList", method=RequestMethod.POST)
-	public @ResponseBody HashMap<String,Object> getScrapList() {
+	public @ResponseBody HashMap<String,Object> getScrapList(HttpSession session) {
+
+		HashMap<String,Object> sessionInfo = (HashMap<String,Object>) session.getAttribute("loginSession");
 		
-		//추후 로그인 기능 만들면 세션값 넣어주면 됨
-		String registid = "unname";
-		
-		HashMap<String,Object> map = crawlingService.getScrapList(registid);
+		HashMap<String,Object> map = crawlingService.getScrapList(String.valueOf(sessionInfo.get("SEQ")));
 		
 		return map;
 	}

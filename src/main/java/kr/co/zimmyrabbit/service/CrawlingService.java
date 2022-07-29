@@ -311,7 +311,7 @@ public class CrawlingService {
     /*
      * INSERT SCRAP NEWS <<START>>
      */
-	public void setScarpNews(String data) {
+	public void setScarpNews(String data, String seq) {
 		
 		JSONParser parser = new JSONParser();
 		
@@ -330,7 +330,7 @@ public class CrawlingService {
 				map.put("comp", comp);
 				map.put("title", title);
 				map.put("href", href);
-				map.put("registid", "unname");
+				map.put("registid", seq);
 				crawlingDao.insertScrapNews(map);
 			}
 		} catch (ParseException e) {
