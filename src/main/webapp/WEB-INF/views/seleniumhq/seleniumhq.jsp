@@ -239,25 +239,13 @@ button {
 </div>
 
 <div id="newsHead" class="parentNewsDiv newsHead">
-	<div id="naverNewsHead" class="naverNewsDiv newsHead">NAVER</div>
-	<div id="daumNewsHead" class="daumNewsDiv newsHead">DAUM</div>
-	<div id="googleNewsHead" class="googleNewsDiv newsHead">GOOGLE</div>
+	<div id="naverNewsHead" class="naverNewsDiv newsHead">News</div>
 </div>
 
 <div id="newsBody" class="parentNewsDiv">
 	<div class="naverNewsDiv">
-		<div id="naverNewsBody"></div>
-		<div id="naverNewsPaging" class="newsHead"></div>
-	</div>
-	
-	<div class="daumNewsDiv">
-		<div id="daumNewsBody"></div>
-		<div id="daumNewsPaging" class="newsHead"></div>
-	</div>
-	
-	<div class="googleNewsDiv">
-		<div id="googleNewsBody"></div>
-		<div id="googleNewsPaging" class="newsHead"></div>
+		<div id="NewsBodyContent"></div>
+		<div id="NewsBodyPaging" class="newsHead"></div>
 	</div>
 </div>
 
@@ -325,7 +313,7 @@ function reqSearchText(siteflag, pageflag, saveSearch) {
 		toast("검색어를 입력해 주세요.");
 		return;
 	}
-	
+
 	openLoading();
 	
 	$.ajax({
@@ -336,21 +324,37 @@ function reqSearchText(siteflag, pageflag, saveSearch) {
 				  ,"pageflag" : pageflag}
 		, success : function(data) {
 			
+			var newsFormData = '';
+			var newsFromPaging = '';
+			
+			newsFormData += "<table>";
+			newsFormData += "	<th width='30'></th> <th width='100'>플랫폼</th> <th width='200'>뉴스사</th> <th width='800'>제목</th> <th>작성일</th>";
+			
 			// NAVER NEWS SETTING
 			if(siteflag == 0 || siteflag == 1) {
 				//naverAPINewsSetting(data);
-				naverNewsSetting(data,query);
+				newsFormData += naverNewsSetting(data,query);
 			}
 			
 			// DAUM NEWS SETTING	
 			if(siteflag == 0 || siteflag == 2) {
-				daumNewsSetting(data,query);
+				newsFormData += daumNewsSetting(data,query);
 			}
 			
 			// GOOGLE NEWS SETTING
 			if(siteflag == 0 || siteflag == 3) {
-				googleNewsSetting(data,query);
+				newsFormData += googleNewsSetting(data,query);
 			}
+			
+			newsFormData += "</table>";
+			
+			$("#NewsBodyContent").html(newsFormData);
+			
+			for(var j=1; j<11; j++) {
+				newsFromPaging += "<a class='newslink' onclick=reqSearchText(0," + j +",'" + query + "') href='#'>" + j + " </a>";
+			}
+		
+			$("#NewsBodyPaging").html(newsFromPaging);
 			
 			closeLoading();
 		},
@@ -403,28 +407,29 @@ function reqSearchText(siteflag, pageflag, saveSearch) {
  	var vNaverNews = "";
  	var vNaverPaging = "";
  	
- 	vNaverNews += "<table>"
- 	vNaverNews += "	<th></th> <th>뉴스사</th> <th>제목</th> <th>작성일</th>"
+ 	//NaverNews += "<table>"
+ 	//vNaverNews += "	<th></th> <th>뉴스사</th> <th>제목</th> <th>작성일</th>"
  	
  	for(var i=0; i<data.naver.NaverNewsTitleArr.length; i++) {
  		vNaverNews += "	 <tr>"
  		vNaverNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
+ 		vNaverNews += "	  <td> NAVER </td>"
  		vNaverNews += "	  <td>" + data.naver.NaverNewsCompArr[i] + "</td>"
  		vNaverNews += "   <td> <a class='newslink' id='" + data.naver.NaverNewsHrefArr[i] + "' onclick=newsPopup(this.id)>" + data.naver.NaverNewsTitleArr[i] + "</a> </td>"
  		vNaverNews += "   <td class='font'>" + data.naver.NaverNewsRegTmArr[i] + "</td>"
  		vNaverNews += "  </tr>"
  	}
  	
- 	vNaverNews += "</table>"
+ 	//vNaverNews += "</table>"
  		
- 	$("#naverNewsBody").html(vNaverNews);
+ 	//$("#naverNewsBody").html(vNaverNews);
+ 	return vNaverNews;
  	
+ 	//for(var j=1; j<11; j++) {
+ 		//vNaverPaging += "<a class='newslink' onclick=reqSearchText(1," + j +",'" + query + "') href='#'>" + j + " </a>";
+ 	//}
  	
- 	for(var j=1; j<11; j++) {
- 		vNaverPaging += "<a class='newslink' onclick=reqSearchText(1," + j +",'" + query + "') href='#'>" + j + " </a>";
- 	}
- 	
- 	$("#naverNewsPaging").html(vNaverPaging);
+ 	//$("#naverNewsPaging").html(vNaverPaging);
  }
 
 /*
@@ -437,27 +442,29 @@ function daumNewsSetting(data,query) {
 	var vDaumNews = "";
 	var vDaumPaging = "";
 	
-	vDaumNews += "<table>"
-	vDaumNews += "	<th></th> <th>뉴스사</th> <th>제목</th> <th>작성일</th>"
+	//vDaumNews += "<table>"
+	//vDaumNews += "	<th></th> <th>뉴스사</th> <th>제목</th> <th>작성일</th>"
 	
 	for(var i=0; i<data.daum.daumNewsTitleArr.length; i++) {
 		vDaumNews += "	 <tr>"
 		vDaumNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
+		vDaumNews += "	  <td> DAUM </td>"
 		vDaumNews += "	  <td>" + data.daum.daumNewsCompArr[i] + "</td>"
 		vDaumNews += "    <td> <a class='newslink' id='" + data.daum.daumNewsHrefArr[i] + "' onclick=newsPopup(this.id)>" + data.daum.daumNewsTitleArr[i] + "</a> </td>"
 		vDaumNews += "    <td class='font'>" + data.daum.daumNewsRegTmArr[i] + "</td>"
 		vDaumNews += "   </tr>"
 	}
 	
-	vDaumNews += "</table>"
+	//vDaumNews += "</table>"
 		
-	$("#daumNewsBody").html(vDaumNews);
+	//$("#daumNewsBody").html(vDaumNews);
+	return vDaumNews;
 	
-	for(var j=1; j<11; j++) {
-		vDaumPaging += "<a class='newslink' onclick=reqSearchText(2," + j +",'" + query + "') href='#'>" + j + " </a>";
-	}
+	//for(var j=1; j<11; j++) {
+		//vDaumPaging += "<a class='newslink' onclick=reqSearchText(2," + j +",'" + query + "') href='#'>" + j + " </a>";
+	//}
 	
-	$("#daumNewsPaging").html(vDaumPaging);
+	//$("#daumNewsPaging").html(vDaumPaging);
 }
  
 /*
@@ -470,28 +477,29 @@ function googleNewsSetting(data,query) {
 	var vGoogleNews = "";
 	var vGooglePaging = "";
 	
-	vGoogleNews += "<table>"
-	vGoogleNews += " <th></th> <th>뉴스사</th> <th>제목</th> <th>작성일</th>"	
+	//vGoogleNews += "<table>"
+	//vGoogleNews += " <th></th> <th>뉴스사</th> <th>제목</th> <th>작성일</th>"	
 	
 	for(var i=0; i<data.google.googleNewsTitleArr.length; i++) {
 		vGoogleNews += "  <tr>"
 		vGoogleNews += "	<td> <input type='checkbox' name='news_checkbox'> </td>"
+		vGoogleNews += "	  	<td> GOOGLE </td>"
 		vGoogleNews += "	<td>" + data.google.googleNewsCompArr[i] + "</td>"
 		vGoogleNews += "    <td> <a class='newslink' id='" + data.google.googleNewsHrefArr[i] + "' onclick=newsPopup(this.id)>" + data.google.googleNewsTitleArr[i] + "</a> </td>"
 		vGoogleNews += "    <td class='font'>" + data.google.googleNewsRegTmArr[i] + "</td>"
 		vGoogleNews += "  </tr>"
 	}
 	
-	vGoogleNews += "</table>"
+	//vGoogleNews += "</table>"
 	
-	$("#googleNewsBody").html(vGoogleNews);
+	//$("#googleNewsBody").html(vGoogleNews);
+	return vGoogleNews;
 	
+	//for(var j=1; j<11; j++) {
+		//vGooglePaging += "<a class='newslink' onclick=reqSearchText(3," + j +",'" + query + "') href='#'>" + j + " </a>";
+	//}
 	
-	for(var j=1; j<11; j++) {
-		vGooglePaging += "<a class='newslink' onclick=reqSearchText(3," + j +",'" + query + "') href='#'>" + j + " </a>";
-	}
-	
-	$("#googleNewsPaging").html(vGooglePaging);
+	//$("#googleNewsPaging").html(vGooglePaging);
 }
 
 /*

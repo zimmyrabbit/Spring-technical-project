@@ -114,9 +114,6 @@ body {
 	<label for="id">아이디</label><br>
 	<input type="text" id="id" name="id" />
 
-	<label for="pw">비밀번호</label><br>
-	<input type="password" id="pw" name="pw" />
-
 	<span id="loginspan"></span>
 	<div style="border-top: 1px solid #A48654;"></div>
 	
