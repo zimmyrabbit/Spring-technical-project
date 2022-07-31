@@ -224,13 +224,14 @@ button {
  <input id="Timer" type="text" value="" readonly/>
  <input id="setTime" type="text" value="${sessionScope.loginSession.TIMER}" placeholder="timer 주기"/>
  <input id="keyword" type="text" value="${sessionScope.loginSession.KEYWORD}" placeholder="키워드"/>
- <button id="timerStartBtn" onclick="startTimer()">시작</button>
+ <button id="timerSetting" onclick="startTimer()">시작</button>
+ <button id="timerSetting" onclick="stopTimer()">중지</button>
  <button id="timerSetting" onclick="saveTimer()">저장</button>
 </p>
 
 <div class="search_box_DIV">
 	<input type="text" id="searchText" name="searchText" class="search_box" onkeypress="pressEnterKey(event)" placeholder="검색어 입력"/>
-	<button id="searchBtn" onclick="reqSearchText(0,1)">검색</button>
+	<button id="searchBtn" onclick="reqSearchText(0,1); stopTimer();">검색</button>
 </div>
 
 <div>
@@ -289,7 +290,7 @@ $(document).ready(function() {
  	//timer start
  	//startTimer();
  	if($("#setTime").value != "") {
- 		startTimer();
+ 		startTimer(0);
  	}
 })
 
@@ -726,9 +727,11 @@ function nullCheck(flag) {
  
  /*
   * TIMER SETTING FUNCTION
+  * flag : 0 - start
+  *        1 - stop
   */
- function startTimer() {
-	 
+ const startTimer = function(flag) {
+	  
 	 var settime = $("#setTime").val()
 	 var keyword = $("#keyword").val()
 	 
@@ -739,7 +742,7 @@ function nullCheck(flag) {
 		 toast("키워드를 지정해 주세요");
 		 return;
 	 }
-	 
+	
 	reqSearchText(0,1,keyword);
 	 
  	var Timer = document.getElementById('Timer');
@@ -749,33 +752,37 @@ function nullCheck(flag) {
  	//var min = 입력한 분
  	var sec = 60;
  	//var sec = 60;
-
+ 	
  	Timer.value=min+":"+'00'; 
-
-    setInterval(function(){
-        time=time-1000;
-        min=time/(60*1000);
-        
-       if(sec >= 10){
-            sec=sec-1;
-            Timer.value=Math.floor(min)+' : '+sec;
-       } else if(sec < 10 && sec > 0) {
-           sec=sec-1;
-           Timer.value=Math.floor(min)+' : 0'+sec;
-       } else if(sec === 0) {
-	  		sec=60;
-	       	Timer.value=Math.floor(min)+' : '+'00'
-       }
-        
-       if(Math.floor(min) === 0 && sec === 0) {
-    	   reqSearchText(0,1,keyword);
-		   time = parseInt(settime) * 60000;
-		   min = parseInt(settime);
-		   sec = 60;
-       } 
+ 	
+    const interval = setInterval(function(){
+    	
+	        time=time-1000;
+	        min=time/(60*1000);
+	        
+	       if(sec >= 10){
+	            sec=sec-1;
+	            Timer.value=Math.floor(min)+' : '+sec;
+	       } else if(sec < 10 && sec > 0) {
+	           sec=sec-1;
+	           Timer.value=Math.floor(min)+' : 0'+sec;
+	       } else if(sec === 0) {
+		  		sec=60;
+		       	Timer.value=Math.floor(min)+' : '+'00'
+	       }
+	        
+	       if(Math.floor(min) === 0 && sec === 0) {
+	    	   reqSearchText(0,1,keyword);
+			   time = parseInt(settime) * 60000;
+			   min = parseInt(settime);
+			   sec = 60;
+	       } 
     },1000);
  }
  
+ /*
+  * TimerTime, Keyword Save Function
+  */
  function saveTimer() {
 	 
 	 var settime = $("#setTime").val()
@@ -797,6 +804,14 @@ function nullCheck(flag) {
 			alert("ERROR!");
 		}
 	})
+ }
+ 
+ function stopTimer() {
+	 
+	 var highestIntervalId = setInterval(";");
+	 for (var i = 0 ; i < highestIntervalId ; i++) {
+	   clearInterval(i);
+	 }
  }
   
 </script>
