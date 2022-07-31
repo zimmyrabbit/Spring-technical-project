@@ -743,6 +743,8 @@ function nullCheck(flag) {
 		 return;
 	 }
 	
+	stopTimer(); 
+	 
 	reqSearchText(0,1,keyword);
 	 
  	var Timer = document.getElementById('Timer');
