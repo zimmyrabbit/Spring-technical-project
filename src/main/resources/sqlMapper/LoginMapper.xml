@@ -12,11 +12,19 @@
 	</select>
 
 	<select id="getUserInfo" resultType="java.util.HashMap" parameterType="String">
-		SELECT seq, id, name, position, timer
+		SELECT seq, id, name, position, timer, keyword
 		FROM dash_news_userinfo
 		WHERE 1=1
 		AND id = #{parameter}
 	</select>
+	
+	<update id="setTimer" parameterType="java.util.HashMap">
+		UPDATE dash_news_userinfo
+		SET timer = #{timer}
+		, keyword = #{keyword}
+		WHERE 1=1
+		AND seq = #{seq}
+	</update>
 	
 
 </mapper>

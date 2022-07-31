@@ -223,8 +223,9 @@ button {
  <label for="Timer">남은 시간:</label>
  <input id="Timer" type="text" value="" readonly/>
  <input id="setTime" type="text" value="${sessionScope.loginSession.TIMER}" placeholder="timer 주기"/>
- <input id="keyword" type="text" value="손흥민" placeholder="키워드"/>
+ <input id="keyword" type="text" value="${sessionScope.loginSession.KEYWORD}" placeholder="키워드"/>
  <button id="timerStartBtn" onclick="startTimer()">시작</button>
+ <button id="timerSetting" onclick="saveTimer()">저장</button>
 </p>
 
 <div class="search_box_DIV">
@@ -754,7 +755,7 @@ function nullCheck(flag) {
     setInterval(function(){
         time=time-1000;
         min=time/(60*1000);
-
+        
        if(sec >= 10){
             sec=sec-1;
             Timer.value=Math.floor(min)+' : '+sec;
@@ -766,13 +767,36 @@ function nullCheck(flag) {
 	       	Timer.value=Math.floor(min)+' : '+'00'
        }
         
-       if(min === 0 && sec === 0) {
+       if(Math.floor(min) === 0 && sec === 0) {
     	   reqSearchText(0,1,keyword);
 		   time = parseInt(settime) * 60000;
 		   min = parseInt(settime);
 		   sec = 60;
        } 
     },1000);
+ }
+ 
+ function saveTimer() {
+	 
+	 var settime = $("#setTime").val()
+	 var keyword = $("#keyword").val()
+	 var id = '${sessionScope.loginSession.ID}'
+	 
+ 	$.ajax({
+		type : 'get'
+		, url : '/login/saveTimer'
+		, data : {"setTime" : settime
+				, "keyword" : keyword
+				, "loginSeq" : ${sessionScope.loginSession.SEQ}
+ 				, "id" : id}
+		, success : function(data) {
+			window.location.reload();
+		},
+		error : function(error) {
+
+			alert("ERROR!");
+		}
+	})
  }
   
 </script>

@@ -8,4 +8,6 @@ public interface LoginDao {
 
 	public HashMap<String, String> getUserInfo(String parameter);
 
+	public void setTimer(HashMap<String, String> map);
+
 }

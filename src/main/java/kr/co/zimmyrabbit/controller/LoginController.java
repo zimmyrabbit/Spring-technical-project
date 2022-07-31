@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.zimmyrabbit.service.LoginService;
 
@@ -47,8 +48,14 @@ public class LoginController {
 			model.addAttribute("url", "/login/loginform"); 
 			return "login/alert";
 		}
+	}
+	
+	@RequestMapping(value="/login/saveTimer", method=RequestMethod.GET)
+	public @ResponseBody void saveTimer(HttpServletRequest req, HttpSession session) {
+	
+		loginService.saveTimer(req);
 		
-		
+		session.setAttribute("loginSession", loginService.getUserinfo(req.getParameter("id")));
 		
 	}
 	
