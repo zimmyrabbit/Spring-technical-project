@@ -6,6 +6,11 @@
 <html>
 <head>
 
+<!-- Bootstrap 3.3.2 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
 <style type="text/css">
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
@@ -22,7 +27,6 @@ body{
 }
 
 .naverNewsDiv {
-    border: 1px solid red;
     flex:1;
     width:32%;
     box-sizing: border-box;
@@ -329,8 +333,8 @@ function reqSearchText(siteflag, pageflag, saveSearch) {
 			var newsFormData = '';
 			var newsFromPaging = '';
 			
-			newsFormData += "<table>";
-			newsFormData += "	<th width='30'></th> <th width='100'>플랫폼</th> <th width='200'>뉴스사</th> <th width='800'>제목</th> <th>작성일</th>";
+			newsFormData += "<table class='table table-striped table-hover text-center'>";
+			newsFormData += "	<th width='30' class='text-center'></th> <th width='100' class='text-center'>플랫폼</th> <th width='200' class='text-center'>뉴스사</th> <th width='800' class='text-center'>제목</th> <th width='100' class='text-center'>작성일</th>";
 			
 			// NAVER NEWS SETTING
 			if(siteflag == 0 || siteflag == 1) {
@@ -352,9 +356,11 @@ function reqSearchText(siteflag, pageflag, saveSearch) {
 			
 			$("#NewsBodyContent").html(newsFormData);
 			
+			newsFromPaging += "<ul class='pagination'>"
 			for(var j=1; j<11; j++) {
-				newsFromPaging += "<a class='newslink' onclick=reqSearchText(0," + j +",'" + query + "') href='#'>" + j + " </a>";
+				newsFromPaging += "<li> <a class='newslink' onclick=reqSearchText(0," + j +",'" + query + "') href='#'>" + j + " </a> </li>";
 			}
+			newsFromPaging += "</ul>"
 		
 			$("#NewsBodyPaging").html(newsFromPaging);
 			
@@ -540,6 +546,7 @@ function initSearch(flag) {
 
     if(code == 'Enter'){
     	reqSearchText(0,1);
+    	stopTimer();
     }
 }
 
