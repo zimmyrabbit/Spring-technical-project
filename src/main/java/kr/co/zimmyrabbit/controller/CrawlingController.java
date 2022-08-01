@@ -38,7 +38,6 @@ public class CrawlingController {
 		
 		//REQUEST VARIABLE
 		String searchText = request.getParameter("query");
-		String siteParam = request.getParameter("siteflag");
 		int pagingParam = Integer.parseInt(request.getParameter("pageflag"));
 		logger.info("=========searchText=========> " + searchText);
 		logger.info("=========pagingParam========> " + pagingParam);
@@ -47,25 +46,19 @@ public class CrawlingController {
 		HashMap<String, Object> map = new HashMap<>();
 		
 		//NAVER NEWS API
-		if("0".equals(siteParam) || "1".equals(siteParam)) {
-			//String naverNewsJson = crawlingService.searchNaverNewsAPI(searchText);
-			//map.put("naver", naverNewsJson);
-			
-			HashMap<String, Object> naverNews = crawlingService.searchNaverNews(searchText, pagingParam);
-			map.put("naver", naverNews);
-		}
+		//String naverNewsJson = crawlingService.searchNaverNewsAPI(searchText);
+		//map.put("naver", naverNewsJson);
+		
+		HashMap<String, Object> naverNews = crawlingService.searchNaverNews(searchText, pagingParam);
+		map.put("naver", naverNews);
 		
 		//DAUM JSOUP CRAWLING
-		if("0".equals(siteParam) || "2".equals(siteParam)) {
-			HashMap<String, Object> daumNews = crawlingService.searchDaumNews(searchText, pagingParam);
-			map.put("daum", daumNews);
-		}
+		HashMap<String, Object> daumNews = crawlingService.searchDaumNews(searchText, pagingParam);
+		map.put("daum", daumNews);
 		
 		//GOOGLE JSOUP CRAWLING
-		if("0".equals(siteParam) || "3".equals(siteParam)) {
-			HashMap<String, Object> googleNews = crawlingService.searchGoogleNews(searchText, pagingParam);
-			map.put("google", googleNews);
-		}
+		HashMap<String, Object> googleNews = crawlingService.searchGoogleNews(searchText, pagingParam);
+		map.put("google", googleNews);
 		
 		return map;
 	}

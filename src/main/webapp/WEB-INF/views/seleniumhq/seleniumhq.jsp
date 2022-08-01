@@ -7,6 +7,7 @@
 <head>
 
 <!-- Bootstrap 3.3.2 -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
@@ -207,13 +208,15 @@ button {
     color: #fff;
     z-index: 10000;
     text-align:center;
-    line-height: 40px;
+    vertical-align:middle;
 }
 
 #toast.reveal {
     opacity: 1;
     visibility: visible;
-    transform: translate(-50%, 0)
+    transform: translate(-50%, 0);
+    text-align : center;
+    vertical-align:middle;
 }
 
 </style>
@@ -235,7 +238,7 @@ button {
 
 <div class="search_box_DIV">
 	<input type="text" id="searchText" name="searchText" class="search_box" onkeypress="pressEnterKey(event)" placeholder="검색어 입력"/>
-	<button id="searchBtn" onclick="reqSearchText(0,1); stopTimer();">검색</button>
+	<button id="searchBtn" onclick="reqSearchText(1,1);">검색</button>
 </div>
 
 <div>
@@ -270,9 +273,8 @@ button {
 	</div>
 </div>
 
-<div id="toast"></div>
+<div id="toast" class='text-center'></div>
 </body>
-<script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -300,12 +302,10 @@ $(document).ready(function() {
 
 /*
  * [SEARCH ENGINE FUNCTION]
- * flag 	0 : ALL
- *		 	1 : NAVER
- *         	2 : DAUM
- *         	3 : GOOGLE
+ * flag 	0 : -
+ *		 	1 : stopTimer()
  */
-function reqSearchText(siteflag, pageflag, saveSearch) {
+function reqSearchText(timerflag, pageflag, saveSearch) {
 	
 	var query = "" 
 	 
@@ -314,10 +314,14 @@ function reqSearchText(siteflag, pageflag, saveSearch) {
 	} else {
 		query = $("#searchText").val();
 	}
-	
+
 	if(!nullCheck(query)) {
 		toast("검색어를 입력해 주세요.");
 		return;
+	} 
+	
+	if(timerflag == 1) {
+		stopTimer();
 	}
 
 	openLoading();
@@ -326,7 +330,6 @@ function reqSearchText(siteflag, pageflag, saveSearch) {
 		type : 'post'
 		, url : '/seleniumhq/seleniumhq'
 		, data : {"query" : query
-				  ,"siteflag" : siteflag
 				  ,"pageflag" : pageflag}
 		, success : function(data) {
 			
@@ -337,20 +340,14 @@ function reqSearchText(siteflag, pageflag, saveSearch) {
 			newsFormData += "	<th width='30' class='text-center'></th> <th width='100' class='text-center'>플랫폼</th> <th width='200' class='text-center'>뉴스사</th> <th width='800' class='text-center'>제목</th> <th width='100' class='text-center'>작성일</th>";
 			
 			// NAVER NEWS SETTING
-			if(siteflag == 0 || siteflag == 1) {
 				//naverAPINewsSetting(data);
 				newsFormData += naverNewsSetting(data,query);
-			}
 			
 			// DAUM NEWS SETTING	
-			if(siteflag == 0 || siteflag == 2) {
 				newsFormData += daumNewsSetting(data,query);
-			}
 			
 			// GOOGLE NEWS SETTING
-			if(siteflag == 0 || siteflag == 3) {
 				newsFormData += googleNewsSetting(data,query);
-			}
 			
 			newsFormData += "</table>";
 			
@@ -520,12 +517,8 @@ function googleNewsSetting(data,query) {
 function initSearch(flag) {
 	if(flag == 0) {
 		$("#searchText").val("");
-		$("#naverNewsBody").html("");
-		$("#daumNewsBody").html("");
-		$("#googleNewsBody").html("");
-		$("#naverNewsPaging").html("");
-		$("#daumNewsPaging").html("");
-		$("#googleNewsPaging").html("");
+		$("#NewsBodyContent").html("");
+		$("#NewsBodyPaging").html("");
 	} else if (flag == 1) {
 		$("#naverNewsBody").html("");
 		$("#naverNewsPaging").html("");
@@ -543,10 +536,8 @@ function initSearch(flag) {
  */
  function pressEnterKey(e) {
     var code = e.code;
-
     if(code == 'Enter'){
-    	reqSearchText(0,1);
-    	stopTimer();
+    	reqSearchText(1,1);
     }
 }
 
@@ -582,9 +573,9 @@ function nullCheck(flag) {
 		var tr = checkbox.parent().parent().eq(i);
 		var td = tr.children();
 		
-		var comp = td.eq(1).text();
-		var title = td.eq(2).text();
-		var href = td.eq(2).children().attr("id");
+		var comp = td.eq(2).text();
+		var title = td.eq(3).text();
+		var href = td.eq(3).children().attr("id");
 		//var href = td.eq(2).children().attr("href");
 		
 		var data = new Object(); 
@@ -714,7 +705,7 @@ function nullCheck(flag) {
  }
  
  /*
-  * SCRAP SUCCESS TOAST POPUP
+  * TOAST POPUP
   */
  let removeToast;
  function toast(string) {
@@ -728,7 +719,7 @@ function nullCheck(flag) {
              document.getElementById("toast").classList.remove("reveal")
          }, 2000)
      toast.classList.add("reveal"),
-         toast.innerText = string
+     toast.innerText = string
  }
  
  
