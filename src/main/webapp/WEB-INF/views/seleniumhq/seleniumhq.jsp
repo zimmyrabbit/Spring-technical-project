@@ -219,6 +219,13 @@ button {
     vertical-align:middle;
 }
 
+.test {
+-webkit-ime-mode:active;
+-moz-ime-mode:active;
+-ms-ime-mode:active;
+ime-mode:active;
+}
+
 </style>
 
 <meta charset="UTF-8">
@@ -237,8 +244,9 @@ button {
 </p>
 
 <div class="search_box_DIV">
-	<input type="text" id="searchText" name="searchText" class="search_box" onkeypress="pressEnterKey(event)" placeholder="검색어 입력"/>
+	<input type="text" id="searchText" name="searchText" class="search_box test" onkeydown="pressEnterKey(event)" placeholder="검색어 입력"/>
 	<button id="searchBtn" onclick="reqSearchText(1,1);">검색</button>
+	<div id="inputstat">aaa</div>
 </div>
 
 <div>
@@ -326,49 +334,70 @@ function reqSearchText(timerflag, pageflag, saveSearch) {
 
 	openLoading();
 	
-	$.ajax({
-		type : 'post'
-		, url : '/seleniumhq/seleniumhq'
-		, data : {"query" : query
-				  ,"pageflag" : pageflag}
-		, success : function(data) {
-			
-			var newsFormData = '';
-			var newsFromPaging = '';
-			
-			newsFormData += "<table class='table table-striped table-hover text-center'>";
-			newsFormData += "	<th width='30' class='text-center'></th> <th width='100' class='text-center'>플랫폼</th> <th width='200' class='text-center'>뉴스사</th> <th width='800' class='text-center'>제목</th> <th width='100' class='text-center'>작성일</th>";
-			
-			// NAVER NEWS SETTING
+	var newsFormData = '';
+	var newsFromPaging = '';
+	var cnt = 0;
+	
+	$("#NewsBodyContent").html("");
+	
+	newsFormData += "<table class='table table-striped table-hover text-center' id='table'>";
+	newsFormData += "	<th width='30' class='text-center'></th> <th width='100' class='text-center'>플랫폼</th> <th width='100' class='text-center'>키워드</th> <th width='200' class='text-center'>뉴스사</th> <th width='800' class='text-center'>제목</th> <th width='100' class='text-center'>작성일</th>";
+	
+	$("#NewsBodyContent").append(newsFormData);
+	
+	var arr = query.split(",");
+	
+	for(var i=0; i<arr.length; i++) {
+		$.ajax({
+			type : 'post'
+			, url : '/seleniumhq/seleniumhq'
+			, data : {"query" : arr[i]
+					  ,"pageflag" : pageflag}
+			, success : function(data) {
+				var newsData = "";
+				// NAVER NEWS SETTING
 				//naverAPINewsSetting(data);
-				newsFormData += naverNewsSetting(data,query);
+				newsData += naverNewsSetting(data,arr[cnt]);
+				
+				// DAUM NEWS SETTING	
+				newsData += daumNewsSetting(data,arr[cnt]);
+				
+				// GOOGLE NEWS SETTING
+				newsData += googleNewsSetting(data,arr[cnt]);
+				
+				$("#table").append(newsData);
+				
+				cnt++;
+				
+				if((arr.length) == cnt) {
+					closeLoading();
+				}
+				
+				
 			
-			// DAUM NEWS SETTING	
-				newsFormData += daumNewsSetting(data,query);
-			
-			// GOOGLE NEWS SETTING
-				newsFormData += googleNewsSetting(data,query);
-			
-			newsFormData += "</table>";
-			
-			$("#NewsBodyContent").html(newsFormData);
-			
-			newsFromPaging += "<ul class='pagination'>"
-			for(var j=1; j<11; j++) {
-				newsFromPaging += "<li> <a class='newslink' onclick=reqSearchText(0," + j +",'" + query + "') href='#'>" + j + " </a> </li>";
+			},
+			error : function(error) {
+				closeLoading();
+	
+				alert("ERROR!");
 			}
-			newsFromPaging += "</ul>"
-		
-			$("#NewsBodyPaging").html(newsFromPaging);
-			
-			closeLoading();
-		},
-		error : function(error) {
-			closeLoading();
+		})
+	 }
+	
+	var newsFormDataClose = "";
+	
+	newsFormDataClose += "</table>";
+	
+	$("#NewsBodyContent").append(newsFormDataClose);
+	
+	newsFromPaging += "<ul class='pagination'>"
+	for(var j=1; j<11; j++) {
+		newsFromPaging += "<li> <a class='newslink' onclick=reqSearchText(0," + j +",'" + query + "') href='#'>" + j + " </a> </li>";
+	}
+	newsFromPaging += "</ul>"
 
-			alert("ERROR!");
-		}
-	})
+	$("#NewsBodyPaging").html(newsFromPaging);
+	
 }
  
 /*
@@ -419,6 +448,7 @@ function reqSearchText(timerflag, pageflag, saveSearch) {
  		vNaverNews += "	 <tr>"
  		vNaverNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
  		vNaverNews += "	  <td> NAVER </td>"
+ 		vNaverNews += "	  <td>" + query + "</td>"
  		vNaverNews += "	  <td>" + data.naver.NaverNewsCompArr[i] + "</td>"
  		vNaverNews += "   <td> <a class='newslink' id='" + data.naver.NaverNewsHrefArr[i] + "' onclick=newsPopup(this.id)>" + data.naver.NaverNewsTitleArr[i] + "</a> </td>"
  		vNaverNews += "   <td class='font'>" + data.naver.NaverNewsRegTmArr[i] + "</td>"
@@ -454,6 +484,7 @@ function daumNewsSetting(data,query) {
 		vDaumNews += "	 <tr>"
 		vDaumNews += "	  <td> <input type='checkbox' name='news_checkbox'> </td>"
 		vDaumNews += "	  <td> DAUM </td>"
+		vDaumNews += "	  <td>" + query + "</td>"
 		vDaumNews += "	  <td>" + data.daum.daumNewsCompArr[i] + "</td>"
 		vDaumNews += "    <td> <a class='newslink' id='" + data.daum.daumNewsHrefArr[i] + "' onclick=newsPopup(this.id)>" + data.daum.daumNewsTitleArr[i] + "</a> </td>"
 		vDaumNews += "    <td class='font'>" + data.daum.daumNewsRegTmArr[i] + "</td>"
@@ -488,7 +519,8 @@ function googleNewsSetting(data,query) {
 	for(var i=0; i<data.google.googleNewsTitleArr.length; i++) {
 		vGoogleNews += "  <tr>"
 		vGoogleNews += "	<td> <input type='checkbox' name='news_checkbox'> </td>"
-		vGoogleNews += "	  	<td> GOOGLE </td>"
+		vGoogleNews += "	<td> GOOGLE </td>"
+		vGoogleNews += "	<td>" + query + "</td>"
 		vGoogleNews += "	<td>" + data.google.googleNewsCompArr[i] + "</td>"
 		vGoogleNews += "    <td> <a class='newslink' id='" + data.google.googleNewsHrefArr[i] + "' onclick=newsPopup(this.id)>" + data.google.googleNewsTitleArr[i] + "</a> </td>"
 		vGoogleNews += "    <td class='font'>" + data.google.googleNewsRegTmArr[i] + "</td>"
@@ -532,10 +564,19 @@ function initSearch(flag) {
 }
 
 /*
- * KEY PRESS FUNCTION
+ * KEY DOWN FUNCTION
  */
  function pressEnterKey(e) {
-    var code = e.code;
+	
+	var code = e.code;
+	var keyCode = event.keyCode;
+	
+	if(keyCode == 229) {
+		$("#inputstat").html("한글 입력상태 입니다.");
+	} else if(keyCode >= 65 && keyCode <= 90) {
+		$("#inputstat").html("영문 입력상태 입니다.");
+	}
+	
     if(code == 'Enter'){
     	reqSearchText(1,1);
     }
@@ -573,9 +614,9 @@ function nullCheck(flag) {
 		var tr = checkbox.parent().parent().eq(i);
 		var td = tr.children();
 		
-		var comp = td.eq(2).text();
-		var title = td.eq(3).text();
-		var href = td.eq(3).children().attr("id");
+		var comp = td.eq(3).text();
+		var title = td.eq(4).text();
+		var href = td.eq(4).children().attr("id");
 		//var href = td.eq(2).children().attr("href");
 		
 		var data = new Object(); 
