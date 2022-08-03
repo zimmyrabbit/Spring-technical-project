@@ -219,13 +219,118 @@ button {
     vertical-align:middle;
 }
 
-.test {
--webkit-ime-mode:active;
--moz-ime-mode:active;
--ms-ime-mode:active;
-ime-mode:active;
+/* section calendar */
+
+.sec_cal {
+    width: 360px;
+    margin: 0 auto;
+    font-family: "NotoSansR";
 }
 
+.sec_cal .cal_nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 78px;
+}
+
+.sec_cal .cal_nav .year-month {
+    width: 300px;
+    text-align: center;
+    line-height: 1;
+}
+
+.sec_cal .cal_nav .nav {
+    display: flex;
+    border: 1px solid #333333;
+    border-radius: 5px;
+}
+
+.sec_cal .cal_nav .go-prev,
+.sec_cal .cal_nav .go-next {
+    display: block;
+    width: 50px;
+    height: 78px;
+    font-size: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sec_cal .cal_nav .go-prev::before,
+.sec_cal .cal_nav .go-next::before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #000;
+    border-width: 3px 3px 0 0;
+    transition: border 0.1s;
+}
+
+.sec_cal .cal_nav .go-prev:hover::before,
+.sec_cal .cal_nav .go-next:hover::before {
+    border-color: #ed2a61;
+}
+
+.sec_cal .cal_nav .go-prev::before {
+    transform: rotate(-135deg);
+}
+
+.sec_cal .cal_nav .go-next::before {
+    transform: rotate(45deg);
+}
+
+.sec_cal .cal_wrap {
+    padding-top: 40px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.sec_cal .cal_wrap .days {
+    display: flex;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.sec_cal .cal_wrap::after {
+    top: 368px;
+}
+
+.sec_cal .cal_wrap .day {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% / 7);
+    text-align: left;
+    color: #999;
+    font-size: 12px;
+    text-align: center;
+    border-radius:5px
+}
+
+.current.today {background: rgb(211 ,211 ,211);}
+
+.sec_cal .cal_wrap .dates {
+    display: flex;
+    flex-flow: wrap;
+    height: 290px;
+}
+
+.sec_cal .cal_wrap .day:nth-child(7n -1) {
+    color: #3c6ffa;
+}
+
+.sec_cal .cal_wrap .day:nth-child(7n) {
+    color: #ed2a61;
+}
+
+.sec_cal .cal_wrap .day.disable {
+    color: #ddd;
+}
 </style>
 
 <meta charset="UTF-8">
@@ -244,9 +349,28 @@ ime-mode:active;
 </p>
 
 <div class="search_box_DIV">
-	<input type="text" id="searchText" name="searchText" class="search_box test" onkeydown="pressEnterKey(event)" placeholder="검색어 입력"/>
+	<input type="text" id="searchText" name="searchText" class="search_box" onkeydown="pressEnterKey(event)" placeholder="검색어 입력"/>
 	<button id="searchBtn" onclick="reqSearchText(1,1);">검색</button>
-	<div id="inputstat">aaa</div>
+	<div id="inputstat"></div>
+	<div class="sec_cal">
+	  <div class="cal_nav">
+	    <a href="javascript:;" class="nav-btn go-prev">prev</a>
+	    <div class="year-month"></div>
+	    <a href="javascript:;" class="nav-btn go-next">next</a>
+	  </div>
+	  <div class="cal_wrap">
+	    <div class="days">
+	      <div class="day">월</div>
+	      <div class="day">화</div>
+	      <div class="day">수</div>
+	      <div class="day">목</div>
+	      <div class="day">금</div>
+	      <div class="day">토</div>
+	      <div class="day">일</div>
+	    </div>
+	    <div class="dates"></div>
+	  </div>
+	</div>
 </div>
 
 <div>
@@ -301,6 +425,9 @@ $(document).ready(function() {
  	document.querySelector(".closeBtn").addEventListener("click", close);
  	document.querySelector(".bg").addEventListener("click", close);
  	
+ 	//calendar
+ 	calendarInit();
+ 	
  	//timer start
  	//startTimer();
  	if($("#setTime").value != "") {
@@ -337,13 +464,9 @@ function reqSearchText(timerflag, pageflag, saveSearch) {
 	var newsFormData = '';
 	var newsFromPaging = '';
 	var cnt = 0;
+	var newsData = "";
 	
 	$("#NewsBodyContent").html("");
-	
-	newsFormData += "<table class='table table-striped table-hover text-center' id='table'>";
-	newsFormData += "	<th width='30' class='text-center'></th> <th width='100' class='text-center'>플랫폼</th> <th width='100' class='text-center'>키워드</th> <th width='200' class='text-center'>뉴스사</th> <th width='800' class='text-center'>제목</th> <th width='100' class='text-center'>작성일</th>";
-	
-	$("#NewsBodyContent").append(newsFormData);
 	
 	var arr = query.split(",");
 	
@@ -354,7 +477,13 @@ function reqSearchText(timerflag, pageflag, saveSearch) {
 			, data : {"query" : arr[i]
 					  ,"pageflag" : pageflag}
 			, success : function(data) {
-				var newsData = "";
+				
+				if(cnt == 0) {
+					newsData += "<table class='table table-striped table-hover text-center' id='table'>";
+					newsData += "	<th width='30' class='text-center'></th> <th width='100' class='text-center'>플랫폼</th> <th width='100' class='text-center'>키워드</th> <th width='200' class='text-center'>뉴스사</th> <th width='800' class='text-center'>제목</th> <th width='100' class='text-center'>작성일</th>";
+				}
+				
+				
 				// NAVER NEWS SETTING
 				//naverAPINewsSetting(data);
 				newsData += naverNewsSetting(data,arr[cnt]);
@@ -365,16 +494,16 @@ function reqSearchText(timerflag, pageflag, saveSearch) {
 				// GOOGLE NEWS SETTING
 				newsData += googleNewsSetting(data,arr[cnt]);
 				
-				$("#table").append(newsData);
-				
 				cnt++;
 				
 				if((arr.length) == cnt) {
+					
+					newsData += "</table>";
+					
+					$("#NewsBodyContent").html(newsData);
+					
 					closeLoading();
 				}
-				
-				
-			
 			},
 			error : function(error) {
 				closeLoading();
@@ -383,12 +512,6 @@ function reqSearchText(timerflag, pageflag, saveSearch) {
 			}
 		})
 	 }
-	
-	var newsFormDataClose = "";
-	
-	newsFormDataClose += "</table>";
-	
-	$("#NewsBodyContent").append(newsFormDataClose);
 	
 	newsFromPaging += "<ul class='pagination'>"
 	for(var j=1; j<11; j++) {
@@ -854,6 +977,77 @@ function nullCheck(flag) {
 	   clearInterval(i);
 	 }
  }
+ 
+ function calendarInit() {
+
+	    var date = new Date();
+	    var utc = date.getTime() + (date.getTimezoneOffset() * 60 * 1000);
+	    var kstGap = 9 * 60 * 60 * 1000;
+	    var today = new Date(utc + kstGap);
+	  
+	    var thisMonth = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+	    
+	    var currentYear = thisMonth.getFullYear();
+	    var currentMonth = thisMonth.getMonth();
+	    var currentDate = thisMonth.getDate();
+
+	    renderCalender(thisMonth);
+
+	    function renderCalender(thisMonth) {
+
+	        currentYear = thisMonth.getFullYear();
+	        currentMonth = thisMonth.getMonth();
+	        currentDate = thisMonth.getDate();
+
+	        // 이전 달의 마지막 날 날짜와 요일 구하기
+	        var startDay = new Date(currentYear, currentMonth, 0);
+	        var prevDate = startDay.getDate();
+	        var prevDay = startDay.getDay();
+
+	        // 이번 달의 마지막날 날짜와 요일 구하기
+	        var endDay = new Date(currentYear, currentMonth + 1, 0);
+	        var nextDate = endDay.getDate();
+	        var nextDay = endDay.getDay();
+	        
+	        // 현재 월 표기
+	        $('.year-month').text(currentYear + '.' + (currentMonth + 1));
+
+	        calendar = document.querySelector('.dates')
+	        calendar.innerHTML = '';
+	        
+	        // 지난달
+	        for (var i = prevDate - prevDay + 1; i <= prevDate; i++) {
+	            calendar.innerHTML = calendar.innerHTML + '<div class="day prev disable">' + i + '</div>'
+	        }
+	        // 이번달
+	        for (var i = 1; i <= nextDate; i++) {
+	            calendar.innerHTML = calendar.innerHTML + '<div class="day current">' + i + '</div>'
+	        }
+	        // 다음달
+	        for (var i = 1; i <= (7 - nextDay == 7 ? 0 : 7 - nextDay); i++) {
+	            calendar.innerHTML = calendar.innerHTML + '<div class="day next disable">' + i + '</div>'
+	        }
+
+	        // 오늘 날짜 표기
+	        if (today.getMonth() == currentMonth) {
+	            todayDate = today.getDate();
+	            var currentMonthDate = document.querySelectorAll('.dates .current');
+	            currentMonthDate[todayDate -1].classList.add('today');
+	        }
+	    }
+
+	    // 이전달로 이동
+	    $('.go-prev').on('click', function() {
+	        thisMonth = new Date(currentYear, currentMonth - 1, 1);
+	        renderCalender(thisMonth);
+	    });
+
+	    // 다음달로 이동
+	    $('.go-next').on('click', function() {
+	        thisMonth = new Date(currentYear, currentMonth + 1, 1);
+	        renderCalender(thisMonth); 
+	    });
+}
   
 </script>
 
