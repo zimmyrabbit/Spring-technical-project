@@ -338,15 +338,21 @@ button {
 </head>
 <body>
 
-<p>
+<div>
  <label for="Timer">남은 시간:</label>
  <input id="Timer" type="text" value="" readonly/>
+ <div>
  <input id="setTime" type="text" value="${sessionScope.loginSession.TIMER}" placeholder="timer 주기"/>
+ <span>Timer주기는 분단위로 입력해 주세요.</span>
+ </div>
+ <div>
  <input id="keyword" type="text" value="${sessionScope.loginSession.KEYWORD}" placeholder="키워드"/>
+ <span>키워드는 , 로 구분하여 입력해 주세요.</span>
+ </div>
  <button id="timerSetting" onclick="startTimer()">시작</button>
  <button id="timerSetting" onclick="stopTimer()">중지</button>
  <button id="timerSetting" onclick="saveTimer()">저장</button>
-</p>
+</div>
 
 <div class="search_box_DIV">
 	<input type="text" id="searchText" name="searchText" class="search_box" onkeydown="pressEnterKey(event)" placeholder="검색어 입력"/>
