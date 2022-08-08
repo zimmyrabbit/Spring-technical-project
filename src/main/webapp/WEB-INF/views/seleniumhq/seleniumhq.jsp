@@ -21,6 +21,18 @@ body{
   font-family: 'Open Sans', sans-serif;
 }
 
+.top_DIV {
+	text-align: center;
+	vertical-align: middle;
+	margin:0 auto;
+}
+
+.search_box_DIV {
+	display : inline-block;
+	width : 500px;
+	margin-top: 50px;
+}
+
 .parentNewsDiv{
     width: 95%;
     margin: 10px auto;
@@ -66,11 +78,13 @@ body{
 
 .search_box {
 	width:400px; 
-	height : 30px;
+	height : 60px;
 	display:inline;
   border: none;
   border-bottom: 2px solid black;
   background: #f2f2f2;
+  margin-top : 50px;
+  font-size : x-large;
 }
 
 .tree{
@@ -222,7 +236,7 @@ button {
 /* section calendar */
 
 .sec_cal {
-    width: 360px;
+    width: 450px;
     margin: 0 auto;
     font-family: "NotoSansR";
 }
@@ -331,62 +345,107 @@ button {
 .sec_cal .cal_wrap .day.disable {
     color: #ddd;
 }
+
+.submessage {
+	display : block;
+}
+
+.remaintime {
+	border:0 solid black;
+	background: #f2f2f2;
+	font-size: xx-large;
+	width : 100px;
+	margin : 30px 30px;
+}
+
+.form-field {
+  height: 46px;
+  padding: 0 16px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  font-family: 'Rubik', sans-serif;
+  outline: 0;
+  transition: .2s;
+  margin-top: 20px;
+}
+
+.a3 {
+  animation-delay: 2.2s;
+}
+
+
+.animation {
+  animation-name: move;
+  animation-duration: .4s;
+  animation-fill-mode: both;
+  animation-delay: 2s;
+}
+
+.form-field:focus {
+  border-color: #0f7ef1;
+}
+
 </style>
 
 <meta charset="UTF-8">
 <title>News Search Engine</title>
 </head>
 <body>
-
-<div>
- <label for="Timer">남은 시간:</label>
- <input id="Timer" type="text" value="" readonly/>
- <div>
- <input id="setTime" type="text" value="${sessionScope.loginSession.TIMER}" placeholder="timer 주기"/>
- <span>Timer주기는 분단위로 입력해 주세요.</span>
- </div>
- <div>
- <input id="keyword" type="text" value="${sessionScope.loginSession.KEYWORD}" placeholder="키워드"/>
- <span>키워드는 , 로 구분하여 입력해 주세요.</span>
- </div>
- <button id="timerSetting" onclick="startTimer()">시작</button>
- <button id="timerSetting" onclick="stopTimer()">중지</button>
- <button id="timerSetting" onclick="saveTimer()">저장</button>
-</div>
-
-<div class="search_box_DIV">
-	<input type="text" id="searchText" name="searchText" class="search_box" onkeydown="pressEnterKey(event)" placeholder="검색어 입력"/>
-	<button id="searchBtn" onclick="reqSearchText(1,1);">검색</button>
-	<div id="inputstat"></div>
-	<div class="sec_cal">
-	  <div class="cal_nav">
-	    <a href="javascript:;" class="nav-btn go-prev">prev</a>
-	    <div class="year-month"></div>
-	    <a href="javascript:;" class="nav-btn go-next">next</a>
-	  </div>
-	  <div class="cal_wrap">
-	    <div class="days">
-	      <div class="day">월</div>
-	      <div class="day">화</div>
-	      <div class="day">수</div>
-	      <div class="day">목</div>
-	      <div class="day">금</div>
-	      <div class="day">토</div>
-	      <div class="day">일</div>
-	    </div>
-	    <div class="dates"></div>
-	  </div>
+<div class="top_DIV">
+	<div class="search_box_DIV">
+	 <label for="Timer">남은 시간:</label>
+	 <input id="Timer" type="text" value="" readonly class="remaintime"/>
+	 <button id="timerSetting" onclick="startTimer()" class="btn btn-primary">시작</button>
+	 <button id="timerSetting" onclick="stopTimer()" class="btn btn-primary">중지</button>
+	 <div>
+		 <input id="setTime" type="text" value="${sessionScope.loginSession.TIMER}" placeholder="timer 주기" class="form-field animation a3"/>
+		 <span class="submessage">Timer주기는 분단위로 입력해 주세요.</span>
+	 </div>
+	 <div>
+		 <input id="keyword" type="text" value="${sessionScope.loginSession.KEYWORD}" placeholder="키워드" class="form-field animation a3"/>
+		 <span class="submessage">키워드는 , 로 구분하여 입력해 주세요.</span>
+	 </div>
+	 <button id="timerSetting" onclick="saveTimer()" class="btn btn-primary">저장</button>
+	 
+	 <div>
+	  <input type="text" id="searchText" name="searchText" class="search_box" onkeydown="pressEnterKey(event)" placeholder="검색어 입력"/>
+	  <button id="searchBtn" onclick="reqSearchText(1,1);" class="btn btn-primary">검색</button>
+	  <div id="inputstat"></div>
+	 </div>
+	 
+	</div>
+	
+	<div class="search_box_DIV">
+		<div class="sec_cal">
+		  <div class="cal_nav">
+		    <a href="javascript:;" class="nav-btn go-prev">prev</a>
+		    <div class="year-month"></div>
+		    <a href="javascript:;" class="nav-btn go-next">next</a>
+		  </div>
+		  <div class="cal_wrap">
+		    <div class="days">
+		      <div class="day">월</div>
+		      <div class="day">화</div>
+		      <div class="day">수</div>
+		      <div class="day">목</div>
+		      <div class="day">금</div>
+		      <div class="day">토</div>
+		      <div class="day">일</div>
+		    </div>
+		    <div class="dates"></div>
+		  </div>
+		</div>
 	</div>
 </div>
 
-<div>
-	<button id="initBtn" onclick="initSearch(0)">초기화</button>
-	<button id="scrapBtn" onclick="scrapNews()">스크랩</button>
-	<button class="openBtn" onclick="reqScrapList()">북마크</button>
+<div id="newsHead" class="parentNewsDiv newsHead" style="margin-top: 50px; font-size: x-large;">
+	<div id="naverNewsHead" class="naverNewsDiv newsHead">News</div>
 </div>
 
-<div id="newsHead" class="parentNewsDiv newsHead">
-	<div id="naverNewsHead" class="naverNewsDiv newsHead">News</div>
+<div style="margin-left: 50px;">
+	<button id="initBtn" onclick="initSearch(0)" class="btn btn-primary">초기화</button>
+	<button id="scrapBtn" onclick="scrapNews()" class="btn btn-primary">스크랩</button>
+	<button class="openBtn btn btn-primary" onclick="reqScrapList()" >북마크</button>
 </div>
 
 <div id="newsBody" class="parentNewsDiv">
