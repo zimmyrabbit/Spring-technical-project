@@ -3,6 +3,8 @@ package kr.co.zimmyrabbit.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +28,7 @@ public class KomoranController {
 	public void komoranMain() {}
 	
 	@RequestMapping(value="/komoran/sendfile", method=RequestMethod.POST)
-	public @ResponseBody String komoranSendFile(MultipartFile file) {
+	public @ResponseBody String komoranSendFile(MultipartFile file) throws Exception {
 		
 		System.out.println(file.getOriginalFilename());
 		try {
@@ -35,10 +37,25 @@ public class KomoranController {
 			BufferedReader br = new BufferedReader(isr);
 			
 	        String str;
+	        String text = "";
+	        int flag = 0;
 	        
-	        while ((str = br.readLine()) != null) {
-	        	System.out.println(str);        
+	        while ((str = br.readLine()) != null) {     
+	        	if(flag == 0) {
+	        		text += str;
+	        	} else {
+	        		text += " " + str;
+	        	}
+	        	flag++;
 	        }
+	        
+	        HashMap<String,Integer> komoran = komoranService.doWordAnalysis(text);
+	        
+	        Set<String> keySet = komoran.keySet();
+	        for (String key : keySet) {	
+	        	System.out.println(key + " : " + komoran.get(key));	
+	        }
+	        
 	        
 		} catch (IOException e) {
 			e.printStackTrace();
