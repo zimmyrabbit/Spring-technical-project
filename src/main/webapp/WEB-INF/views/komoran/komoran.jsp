@@ -34,6 +34,14 @@ function uploadFile(){
     
     var form = $('#uploadForm')[0];
     var formData = new FormData(form);
+	
+	for (let values of formData.values()) {
+	    if(values.size == 0) {
+	    	alert("파일을 업로드 해주세요.");
+	    	return;
+	    }
+	 }
+	
  
     $.ajax({
         url : '/komoran/sendfile',
