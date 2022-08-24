@@ -50,7 +50,11 @@ function uploadFile(){
         contentType : false,
         processData : false        
     }).done(function(data){
-        alert(data);
+        console.log(data);
+		console.log(data[1].valueOf());
+		var test = data[1].valueOf();
+		console.log(data[1].test);
+		console.log(data[1].key());
     });
 }
 </script>

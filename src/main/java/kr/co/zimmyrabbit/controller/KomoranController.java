@@ -3,7 +3,11 @@ package kr.co.zimmyrabbit.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -28,9 +32,12 @@ public class KomoranController {
 	public void komoranMain() {}
 	
 	@RequestMapping(value="/komoran/sendfile", method=RequestMethod.POST)
-	public @ResponseBody String komoranSendFile(MultipartFile file) throws Exception {
+	public @ResponseBody List<String> komoranSendFile(MultipartFile file) throws Exception {
 		
 		System.out.println(file.getOriginalFilename());
+		
+		List<String> keySetList  = null;
+		
 		try {
 			InputStreamReader isr = new InputStreamReader(file.getInputStream(), "UTF-8");
 			
@@ -56,11 +63,20 @@ public class KomoranController {
 	        	System.out.println(key + " : " + komoran.get(key));	
 	        }
 	        
+	        System.out.println("--------------------------------------------------------------");	
 	        
+	        keySetList = new ArrayList<>(komoran.keySet());
+	        
+			Collections.sort(keySetList, (o1, o2) -> (komoran.get(o2).compareTo(komoran.get(o1))));
+			for(String key : keySetList) {
+				System.out.println("key : " + key + " / " + "value : " + komoran.get(key));
+			}
+ 
+	       
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		return "success";
+		return keySetList;
 	}
 }
