@@ -5,7 +5,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+	crossorigin="anonymous">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+	crossorigin="anonymous">
 <!-- Bootstrap 3.3.2 -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
@@ -13,55 +22,54 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 <style type="text/css">
-
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
-body{
-  background: #f2f2f2;
-  font-family: 'Open Sans', sans-serif;
+body {
+	background: #f2f2f2;
+	font-family: 'Open Sans', sans-serif;
 }
 
 .top_DIV {
 	text-align: center;
 	vertical-align: middle;
-	margin:0 auto;
+	margin: 0 auto;
 }
 
 .search_box_DIV {
-	display : inline-block;
-	width : 500px;
+	display: inline-block;
+	width: 500px;
 	margin-top: 50px;
 }
 
-.parentNewsDiv{
-    width: 95%;
-    margin: 10px auto;
-    display: flex;
+.parentNewsDiv {
+	width: 95%;
+	margin: 10px auto;
+	display: flex;
 }
 
 .naverNewsDiv {
-    flex:1;
-    width:32%;
-    box-sizing: border-box;
+	flex: 1;
+	width: 32%;
+	box-sizing: border-box;
 }
 
 .daumNewsDiv {
-    border: 1px solid green;
-    flex:1;
-    margin: 0px 1%;
-    width:32%;
-    box-sizing: border-box;
+	border: 1px solid green;
+	flex: 1;
+	margin: 0px 1%;
+	width: 32%;
+	box-sizing: border-box;
 }
 
 .googleNewsDiv {
-    border: 1px solid blue;
-    flex:1;
-    width:32%;
-    box-sizing: border-box;
+	border: 1px solid blue;
+	flex: 1;
+	width: 32%;
+	box-sizing: border-box;
 }
 
 .newsHead {
-	text-align : center
+	text-align: center
 }
 
 .font {
@@ -69,7 +77,7 @@ body{
 }
 
 .RegTmArr {
-	width : 10%;
+	width: 10%;
 }
 
 .search_box_DIV {
@@ -77,400 +85,428 @@ body{
 }
 
 .search_box {
-	width:400px; 
-	height : 60px;
-	display:inline;
-  border: none;
-  border-bottom: 2px solid black;
-  background: #f2f2f2;
-  margin-top : 50px;
-  font-size : x-large;
+	width: 400px;
+	height: 60px;
+	display: inline;
+	border: none;
+	border-bottom: 2px solid black;
+	background: #f2f2f2;
+	margin-top: 50px;
+	font-size: x-large;
 }
 
-.tree{
-  margin-top: 5px;
+.tree {
+	margin-top: 5px;
 }
-.tree, .tree ul{
-  list-style: none; /* 기본 리스트 스타일 제거 */
-  padding-left:10px;
+
+.tree, .tree ul {
+	list-style: none; /* 기본 리스트 스타일 제거 */
+	padding-left: 10px;
 }
-.tree *:before{
-  width:15px;
-  height:15px;
-  display:inline-block;
+
+.tree *:before {
+	width: 15px;
+	height: 15px;
+	display: inline-block;
 }
-.tree label{
-  cursor: pointer;
-  font-family: NotoSansKrMedium, sans-serif !important;
-  font-size: 14px;
-  color: #0055CC;
+
+.tree label {
+	cursor: pointer;
+	font-family: NotoSansKrMedium, sans-serif !important;
+	font-size: 14px;
+	color: #0055CC;
 }
-.tree label:hover{
-  color: #00AACC;
+
+.tree label:hover {
+	color: #00AACC;
 }
-.tree label:before{
-  content: '+'
+
+.tree label:before {
+	content: '+'
 }
-.tree label.lastTree:before{
-  content:'o';
+
+.tree label.lastTree:before {
+	content: 'o';
 }
-.tree label:hover:before{
-  content: '+'
+
+.tree label:hover:before {
+	content: '+'
 }
-.tree label.lastTree:hover:before{
-  content:'o';
+
+.tree label.lastTree:hover:before {
+	content: 'o';
 }
+
 .tree input[type="checkbox"] {
-  display: none;
-}
-.tree input[type="checkbox"]:checked~ul {
-  display: none;
-}
-.tree input[type="checkbox"]:checked+label:before{
-  content: '-'
-}
-.tree input[type="checkbox"]:checked+label:hover:before{
-  content: '-'
+	display: none;
 }
 
-.tree input[type="checkbox"]:checked+label.lastTree:before{
-  content: 'o';
+.tree input[type="checkbox"]:checked ~ul {
+	display: none;
 }
-.tree input[type="checkbox"]:checked+label.lastTree:hover:before{
-  content: 'o';
+
+.tree input[type="checkbox"]:checked+label:before {
+	content: '-'
+}
+
+.tree input[type="checkbox"]:checked+label:hover:before {
+	content: '-'
+}
+
+.tree input[type="checkbox"]:checked+label.lastTree:before {
+	content: 'o';
+}
+
+.tree input[type="checkbox"]:checked+label.lastTree:hover:before {
+	content: 'o';
 }
 
 button {
-  background-color: #101B41;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  color: white;
+	background-color: #101B41;
+	padding: 5px 10px;
+	border-radius: 4px;
+	cursor: pointer;
+	color: white;
 }
 
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .modal .bg {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6);
 }
 
 .modalBox {
-  position: absolute;
-  background-color: #fff;
-  width: 800px;
-  height: 400px;
-  padding: 15px;
-  overflow-y: auto;
+	position: absolute;
+	background-color: #fff;
+	width: 800px;
+	height: 400px;
+	padding: 15px;
+	overflow-y: auto;
 }
 
 .modalBox button {
-  display: block;
-  width: 80px;
-  margin: 0 auto;
+	display: block;
+	width: 80px;
+	margin: 0 auto;
 }
 
 .hidden {
-  display: none;
+	display: none;
 }
 
 .newslink:link {
-	color : black;
+	color: black;
 	text-decoration: none;
 }
 
 .newslink:hover {
-	color : blue;
-	font-size : 15px;
+	color: blue;
+	font-size: 15px;
 }
 
 .scrapNewslink:link {
-	color : black;
+	color: black;
 	text-decoration: none;
 }
 
 .scrapNewslink:hover {
-	color : blue;
+	color: blue;
 	text-decoration: none;
 }
 
 #toast {
-    position: absolute;
-    left: 50%;
-    top:35%;
-    width:200px;
-    height:40px;
-    padding: 15px 20px;
-    transform: translate(-50%, 10px);
-    border-radius: 30px;
-    overflow: hidden;
-    font-size: .8rem;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity .5s, visibility .5s, transform .5s;
-    background: rgba(0, 0, 0, .35);
-    color: #fff;
-    z-index: 10000;
-    text-align:center;
-    vertical-align:middle;
+	position: absolute;
+	left: 50%;
+	top: 35%;
+	width: 200px;
+	height: 40px;
+	padding: 15px 20px;
+	transform: translate(-50%, 10px);
+	border-radius: 30px;
+	overflow: hidden;
+	font-size: .8rem;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity .5s, visibility .5s, transform .5s;
+	background: rgba(0, 0, 0, .35);
+	color: #fff;
+	z-index: 10000;
+	text-align: center;
+	vertical-align: middle;
 }
 
 #toast.reveal {
-    opacity: 1;
-    visibility: visible;
-    transform: translate(-50%, 0);
-    text-align : center;
-    vertical-align:middle;
+	opacity: 1;
+	visibility: visible;
+	transform: translate(-50%, 0);
+	text-align: center;
+	vertical-align: middle;
 }
 
 /* section calendar */
-
 .sec_cal {
-    width: 450px;
-    margin: 0 auto;
-    font-family: "NotoSansR";
+	width: 450px;
+	margin: 0 auto;
+	font-family: "NotoSansR";
 }
 
 .sec_cal .cal_nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 700;
-    font-size: 48px;
-    line-height: 78px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: 700;
+	font-size: 48px;
+	line-height: 78px;
 }
 
 .sec_cal .cal_nav .year-month {
-    width: 300px;
-    text-align: center;
-    line-height: 1;
+	width: 300px;
+	text-align: center;
+	line-height: 1;
 }
 
 .sec_cal .cal_nav .nav {
-    display: flex;
-    border: 1px solid #333333;
-    border-radius: 5px;
+	display: flex;
+	border: 1px solid #333333;
+	border-radius: 5px;
 }
 
-.sec_cal .cal_nav .go-prev,
-.sec_cal .cal_nav .go-next {
-    display: block;
-    width: 50px;
-    height: 78px;
-    font-size: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.sec_cal .cal_nav .go-prev, .sec_cal .cal_nav .go-next {
+	display: block;
+	width: 50px;
+	height: 78px;
+	font-size: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.sec_cal .cal_nav .go-prev::before,
-.sec_cal .cal_nav .go-next::before {
-    content: "";
-    display: block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #000;
-    border-width: 3px 3px 0 0;
-    transition: border 0.1s;
+.sec_cal .cal_nav .go-prev::before, .sec_cal .cal_nav .go-next::before {
+	content: "";
+	display: block;
+	width: 20px;
+	height: 20px;
+	border: 3px solid #000;
+	border-width: 3px 3px 0 0;
+	transition: border 0.1s;
 }
 
-.sec_cal .cal_nav .go-prev:hover::before,
-.sec_cal .cal_nav .go-next:hover::before {
-    border-color: #ed2a61;
+.sec_cal .cal_nav .go-prev:hover::before, .sec_cal .cal_nav .go-next:hover::before
+	{
+	border-color: #ed2a61;
 }
 
 .sec_cal .cal_nav .go-prev::before {
-    transform: rotate(-135deg);
+	transform: rotate(-135deg);
 }
 
 .sec_cal .cal_nav .go-next::before {
-    transform: rotate(45deg);
+	transform: rotate(45deg);
 }
 
 .sec_cal .cal_wrap {
-    padding-top: 40px;
-    position: relative;
-    margin: 0 auto;
+	padding-top: 40px;
+	position: relative;
+	margin: 0 auto;
 }
 
 .sec_cal .cal_wrap .days {
-    display: flex;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #ddd;
+	display: flex;
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #ddd;
 }
 
 .sec_cal .cal_wrap::after {
-    top: 368px;
+	top: 368px;
 }
 
 .sec_cal .cal_wrap .day {
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    width: calc(100% / 7);
-    text-align: left;
-    color: #999;
-    font-size: 12px;
-    text-align: center;
-    border-radius:5px
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: calc(100%/ 7);
+	text-align: left;
+	color: #999;
+	font-size: 12px;
+	text-align: center;
+	border-radius: 5px
 }
 
-.current.today {background: rgb(211 ,211 ,211);}
+.current.today {
+	background: rgb(211, 211, 211);
+}
 
 .sec_cal .cal_wrap .dates {
-    display: flex;
-    flex-flow: wrap;
-    height: 290px;
+	display: flex;
+	flex-flow: wrap;
+	height: 290px;
 }
 
 .sec_cal .cal_wrap .day:nth-child(7n -1) {
-    color: #3c6ffa;
+	color: #3c6ffa;
 }
 
 .sec_cal .cal_wrap .day:nth-child(7n) {
-    color: #ed2a61;
+	color: #ed2a61;
 }
 
 .sec_cal .cal_wrap .day.disable {
-    color: #ddd;
+	color: #ddd;
 }
 
 .submessage {
-	display : block;
+	display: block;
 }
 
 .remaintime {
-	border:0 solid black;
+	border: 0 solid black;
 	background: #f2f2f2;
 	font-size: xx-large;
-	width : 100px;
-	margin : 30px 30px;
+	width: 100px;
+	margin: 30px 30px;
 }
 
 .form-field {
-  height: 46px;
-  padding: 0 16px;
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  font-family: 'Rubik', sans-serif;
-  outline: 0;
-  transition: .2s;
-  margin-top: 20px;
+	height: 46px;
+	padding: 0 16px;
+	border: 2px solid #ddd;
+	border-radius: 4px;
+	font-family: 'Rubik', sans-serif;
+	outline: 0;
+	transition: .2s;
+	margin-top: 20px;
 }
 
 .a3 {
-  animation-delay: 2.2s;
+	animation-delay: 2.2s;
 }
 
-
 .animation {
-  animation-name: move;
-  animation-duration: .4s;
-  animation-fill-mode: both;
-  animation-delay: 2s;
+	animation-name: move;
+	animation-duration: .4s;
+	animation-fill-mode: both;
+	animation-delay: 2s;
 }
 
 .form-field:focus {
-  border-color: #0f7ef1;
+	border-color: #0f7ef1;
 }
 
+header {
+	justify-content: center;
+	margin: auto;
+}
 </style>
 
 <meta charset="UTF-8">
 <title>News Search Engine</title>
 </head>
 <body>
-<div class="top_DIV">
-	<div class="search_box_DIV">
-	 <label for="Timer">남은 시간:</label>
-	 <input id="Timer" type="text" value="" readonly class="remaintime"/>
-	 <button id="timerSetting" onclick="startTimer()" class="btn btn-primary">시작</button>
-	 <button id="timerSetting" onclick="stopTimer()" class="btn btn-primary">중지</button>
-	 <div>
-		 <input id="setTime" type="text" value="${sessionScope.loginSession.TIMER}" placeholder="timer 주기" class="form-field animation a3"/>
-		 <span class="submessage">Timer주기는 분단위로 입력해 주세요.</span>
-	 </div>
-	 <div>
-		 <input id="keyword" type="text" value="${sessionScope.loginSession.KEYWORD}" placeholder="키워드" class="form-field animation a3"/>
-		 <span class="submessage">키워드는 , 로 구분하여 입력해 주세요.</span>
-	 </div>
-	 <button id="timerSetting" onclick="saveTimer()" class="btn btn-primary">저장</button>
-	 
-	 <div>
-	  <input type="text" id="searchText" name="searchText" class="search_box" onkeydown="pressEnterKey(event)" placeholder="검색어 입력"/>
-	  <button id="searchBtn" onclick="reqSearchText(1,1);" class="btn btn-primary">검색</button>
-	  <div id="inputstat"></div>
-	 </div>
-	 
-	</div>
-	
-	<div class="search_box_DIV">
-		<div class="sec_cal">
-		  <div class="cal_nav">
-		    <a href="javascript:;" class="nav-btn go-prev">prev</a>
-		    <div class="year-month"></div>
-		    <a href="javascript:;" class="nav-btn go-next">next</a>
-		  </div>
-		  <div class="cal_wrap">
-		    <div class="days">
-		      <div class="day">월</div>
-		      <div class="day">화</div>
-		      <div class="day">수</div>
-		      <div class="day">목</div>
-		      <div class="day">금</div>
-		      <div class="day">토</div>
-		      <div class="day">일</div>
-		    </div>
-		    <div class="dates"></div>
-		  </div>
+	<div class="top_DIV row justify-content-center shadow mx-4 px-4 mt-0 pt-0">
+		<div class="search_box_DIV col-5 my-3">
+			<label for="Timer">남은 시간:</label> <input id="Timer" type="text"
+				value="" readonly class="remaintime" />
+			<button id="timerSetting" onclick="startTimer()"
+				class="btn btn-primary">시작</button>
+			<button id="timerSetting" onclick="stopTimer()"
+				class="btn btn-primary">중지</button>
+			<hr>
+			<div>
+				<input id="setTime" type="text"
+					value="${sessionScope.loginSession.TIMER}" placeholder="타이머 주기"
+					class="rounded animation a3 w-50" /><p style="display: inline-block;">&nbsp;분</p> <span
+					class="submessage">타이머 주기는 분 단위로 입력해 주세요.</span>
+			</div>
+			<div>
+				<input id="keyword" type="text"
+					value="${sessionScope.loginSession.KEYWORD}" placeholder="키워드"
+					class="rounded animation a3 w-50" /><p style="display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><span class="submessage">키워드는
+					쉼표(,)로 구분하여 입력해 주세요.</span>
+			</div>
+			<button id="timerSetting" onclick="saveTimer()"
+				class="btn btn-primary">저장</button>
+			<hr>
+			<div class="align-middle">
+				<input type="text" id="searchText" name="searchText"
+					class="search_box" onkeydown="pressEnterKey(event)"
+					placeholder="검색어 입력" />
+				<button id="searchBtn" onclick="reqSearchText(1,1);"
+					class="btn btn-primary">검색</button>
+				<div id="inputstat"></div>
+			</div>
+			
+
+		</div>
+
+		<div class="search_box_DIV col-5 my-3">
+			<div class="sec_cal" style="height: 500px;">
+				<div class="cal_nav">
+					<a href="javascript:;" class="nav-btn go-prev">prev</a>
+					<div class="year-month"></div>
+					<a href="javascript:;" class="nav-btn go-next">next</a>
+				</div>
+				<div class="cal_wrap">
+					<div class="days">
+						<div class="day">월</div>
+						<div class="day">화</div>
+						<div class="day">수</div>
+						<div class="day">목</div>
+						<div class="day">금</div>
+						<div class="day">토</div>
+						<div class="day">일</div>
+					</div>
+					<div class="dates"></div>
+				</div>
+			</div>
+		</div>
+		<div>
 		</div>
 	</div>
-</div>
+	<div class=" m-4 shadow-lg">
+		<div id="newsHead" class="parentNewsDiv newsHead pt-4 h1 fw-bold">
+			<div id="naverNewsHead" class="naverNewsDiv newsHead">News</div>
+		</div>
 
-<div id="newsHead" class="parentNewsDiv newsHead" style="margin-top: 50px; font-size: x-large;">
-	<div id="naverNewsHead" class="naverNewsDiv newsHead">News</div>
-</div>
+		<div style="margin-left: 50px;">
+			<button id="initBtn" onclick="initSearch(0)" class="btn btn-primary">초기화</button>
+			<button id="scrapBtn" onclick="scrapNews()" class="btn btn-primary">스크랩</button>
+			<button class="openBtn btn btn-primary" onclick="reqScrapList()">북마크</button>
+		</div>
 
-<div style="margin-left: 50px;">
-	<button id="initBtn" onclick="initSearch(0)" class="btn btn-primary">초기화</button>
-	<button id="scrapBtn" onclick="scrapNews()" class="btn btn-primary">스크랩</button>
-	<button class="openBtn btn btn-primary" onclick="reqScrapList()" >북마크</button>
-</div>
+		<div id="newsBody" class="parentNewsDiv">
+			<div class="naverNewsDiv">
+				<div id="NewsBodyContent"></div>
+				<div id="NewsBodyPaging" class="newsHead"></div>
+			</div>
+		</div>
 
-<div id="newsBody" class="parentNewsDiv">
-	<div class="naverNewsDiv">
-		<div id="NewsBodyContent"></div>
-		<div id="NewsBodyPaging" class="newsHead"></div>
+		<div class="modal hidden">
+			<div class="bg"></div>
+			<div class="modalBox">
+				<ul class="tree" id="scrapbox">
+					<li><input type="checkbox" id="scrap"> <label
+						for="root">ROOT</label>
+						<ul id="rootbox">
+						</ul></li>
+				</ul>
+				<div class="closeBtn">닫기</div>
+			</div>
+		</div>
+
+		<div id="toast" class='text-center'></div>
 	</div>
-</div>
-
-<div class="modal hidden">
-	<div class="bg"></div>
-	<div class="modalBox">
-		<ul class="tree" id="scrapbox">
-		  <li>
-		    <input type="checkbox" id="scrap">
-		    <label for="root">ROOT</label>
-		    <ul id="rootbox">  
-		    </ul>
-		  </li>
-		</ul>
-		<div class="closeBtn">닫기</div>
-	</div>
-</div>
-
-<div id="toast" class='text-center'></div>
 </body>
 <script type="text/javascript">
 
