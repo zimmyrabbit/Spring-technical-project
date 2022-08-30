@@ -408,6 +408,11 @@ header {
 	justify-content: center;
 	margin: auto;
 }
+
+.timerinputbox {
+	width : 40px;
+	text-align: center;
+}
 </style>
 
 <meta charset="UTF-8">
@@ -424,9 +429,9 @@ header {
 				class="btn btn-primary">중지</button>
 			<hr>
 			<div>
-				<input id="setTime" type="text"
+				<input id="setTime" type="text" style="width"
 					value="${sessionScope.loginSession.TIMER}" placeholder="타이머 주기"
-					class="rounded animation a3 w-50" /><p style="display: inline-block;">&nbsp;분</p> <span
+					class="rounded animation a3 timerinputbox" /><p style="display: inline-block;">&nbsp;분</p> <span
 					class="submessage">타이머 주기는 분 단위로 입력해 주세요.</span>
 			</div>
 			<div>
