@@ -284,13 +284,13 @@ public class CrawlingService {
 			
 			Elements divTag = html.getElementsByClass("v7W49e");
 			
-			int divTagCnt = divTag.toString().split("<div class=\"xuvV6b BGxR7d\"").length-1;
+			int divTagCnt = divTag.toString().split("<div class=\"vJOb1e aIfcHf Hw13jc\"").length-1;
 			
 			for(int i=0; i < divTagCnt; i++) {
-				googleNewsTitleArr.add(html.getElementsByClass("v7W49e").get(0).getElementsByClass("xuvV6b BGxR7d").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).getElementsByClass("vJOb1e aIfcHf Hw13jc").get(0).getElementsByClass("iRPxbe").get(0).getElementsByClass("mCBkyc y355M ynAwRc MBeuO nDgy9d").text());
-				googleNewsHrefArr.add(html.getElementsByClass("v7W49e").get(0).getElementsByClass("xuvV6b BGxR7d").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).attr("href"));
-				googleNewsCompArr.add(html.getElementsByClass("v7W49e").get(0).getElementsByClass("xuvV6b BGxR7d").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).getElementsByClass("vJOb1e aIfcHf Hw13jc").get(0).getElementsByClass("iRPxbe").get(0).getElementsByClass("CEMjEf NUnG9d").get(0).getElementsByTag("span").text());
-				googleNewsRegTmArr.add(html.getElementsByClass("v7W49e").get(0).getElementsByClass("xuvV6b BGxR7d").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).getElementsByClass("vJOb1e aIfcHf Hw13jc").get(0).getElementsByClass("iRPxbe").get(0).getElementsByClass("OSrXXb ZE0LJd").get(0).getElementsByTag("span").text());
+				googleNewsTitleArr.add(html.getElementsByClass("MjjYud").get(0).getElementsByClass("SoaBEf xuvV6b").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).getElementsByClass("vJOb1e aIfcHf Hw13jc").get(0).getElementsByClass("iRPxbe").get(0).getElementsByClass("mCBkyc y355M ynAwRc MBeuO nDgy9d").text());
+				googleNewsHrefArr.add(html.getElementsByClass("MjjYud").get(0).getElementsByClass("SoaBEf xuvV6b").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).attr("href"));
+				googleNewsCompArr.add(html.getElementsByClass("MjjYud").get(0).getElementsByClass("SoaBEf xuvV6b").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).getElementsByClass("vJOb1e aIfcHf Hw13jc").get(0).getElementsByClass("iRPxbe").get(0).getElementsByClass("CEMjEf NUnG9d").get(0).getElementsByTag("span").text());
+				googleNewsRegTmArr.add(html.getElementsByClass("MjjYud").get(0).getElementsByClass("SoaBEf xuvV6b").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).getElementsByClass("vJOb1e aIfcHf Hw13jc").get(0).getElementsByClass("iRPxbe").get(0).getElementsByClass("OSrXXb ZE0LJd YsWzw").get(0).getElementsByTag("span").text());
 			}
 			
 		} catch (IOException e) {
