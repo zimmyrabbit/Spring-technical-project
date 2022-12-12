@@ -48,6 +48,7 @@ public class CrawlingService {
 	public static final String GOOGLE_NEWS_URL_HEAD = "https://www.google.com/search?q=";
 	public static final String GOOGLE_NEWS_URL_FOOT = "&hl=ko&tbas=0&tbm=nws&sxsrf=ALiCzsaO1EFCPwRq-Qm-J-j_Z7r5RzoEdA:1656091816046&ei=qPS1YsG2Ao-EmAWNkoXIDw&sa=N&ved=2ahUKEwjBqqTjzsb4AhUPAqYKHQ1JAfkQ8tMDegQIARA3&biw=1920&bih=947&dpr=1&start=";
 	
+	public static final String NAVER_VIEW_URL = "https://search.naver.com/search.naver?where=view&sm=tab_opt&mode=normal&nso=so%3";
 	/*
 	 * NAVER NEWS SEARCH API <<START>>
 	 */
@@ -284,13 +285,13 @@ public class CrawlingService {
 			
 			Elements divTag = html.getElementsByClass("v7W49e");
 			
-			int divTagCnt = divTag.toString().split("<div class=\"vJOb1e aIfcHf Hw13jc\"").length-1;
+			int divTagCnt = divTag.toString().split("<div class=\"vJOb1e aIfcHf qlOiDc\"").length-1;
 			
 			for(int i=0; i < divTagCnt; i++) {
-				googleNewsTitleArr.add(html.getElementsByClass("MjjYud").get(0).getElementsByClass("SoaBEf xuvV6b").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).getElementsByClass("vJOb1e aIfcHf Hw13jc").get(0).getElementsByClass("iRPxbe").get(0).getElementsByClass("mCBkyc y355M ynAwRc MBeuO nDgy9d").text());
-				googleNewsHrefArr.add(html.getElementsByClass("MjjYud").get(0).getElementsByClass("SoaBEf xuvV6b").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).attr("href"));
-				googleNewsCompArr.add(html.getElementsByClass("MjjYud").get(0).getElementsByClass("SoaBEf xuvV6b").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).getElementsByClass("vJOb1e aIfcHf Hw13jc").get(0).getElementsByClass("iRPxbe").get(0).getElementsByClass("CEMjEf NUnG9d").get(0).getElementsByTag("span").text());
-				googleNewsRegTmArr.add(html.getElementsByClass("MjjYud").get(0).getElementsByClass("SoaBEf xuvV6b").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).getElementsByClass("vJOb1e aIfcHf Hw13jc").get(0).getElementsByClass("iRPxbe").get(0).getElementsByClass("OSrXXb ZE0LJd YsWzw").get(0).getElementsByTag("span").text());
+				googleNewsTitleArr.add(html.getElementsByClass("MjjYud").get(0).getElementsByClass("SoaBEf").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).getElementsByClass("vJOb1e aIfcHf qlOiDc").get(0).getElementsByClass("iRPxbe").get(0).getElementsByClass("mCBkyc ynAwRc MBeuO nDgy9d").text());
+				googleNewsHrefArr.add(html.getElementsByClass("MjjYud").get(0).getElementsByClass("SoaBEf").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).attr("href"));
+				googleNewsCompArr.add(html.getElementsByClass("MjjYud").get(0).getElementsByClass("SoaBEf").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).getElementsByClass("vJOb1e aIfcHf qlOiDc").get(0).getElementsByClass("iRPxbe").get(0).getElementsByClass("CEMjEf NUnG9d").get(0).getElementsByTag("span").text());
+				googleNewsRegTmArr.add(html.getElementsByClass("MjjYud").get(0).getElementsByClass("SoaBEf").get(i).getElementsByTag("div").get(0).getElementsByClass("WlydOe").get(0).getElementsByClass("vJOb1e aIfcHf qlOiDc").get(0).getElementsByClass("iRPxbe").get(0).getElementsByClass("OSrXXb ZE0LJd YsWzw").get(0).getElementsByTag("span").text());
 			}
 			
 		} catch (IOException e) {
@@ -306,6 +307,67 @@ public class CrawlingService {
     }
     /*
      * GOOGLE NEWS SEARCH JSOUP CRAWLING <<END>>
+     */
+    
+    /*
+     * NAVER VIEW(CAFE,BLOG) SEARCH JSOUP CRAWLING <<START>>
+     */
+    public HashMap<String, Object> searchNaverView(String searchText, int pagingParam) {
+    	
+    	String textParam = "";
+    	String sortParam = "Add"; // [Ar : 관련도순] [Add : 최신순]
+    	int pageParam = 0;
+    	
+    	if(pagingParam == 1) {
+    		pageParam = pagingParam;
+    	} else {
+    		pageParam = (pagingParam-1) * 10 + 1; 
+    	}
+    	
+    	HashMap<String, Object> map = new HashMap<>();
+    	ArrayList<String> NaverViewTitleArr = new ArrayList<>(); //제목
+    	ArrayList<String> NaverViewTitleHrefArr = new ArrayList<>();
+    	ArrayList<String> NaverViewNameArr = new ArrayList<>();
+    	ArrayList<String> NaverViewRegTmArr = new ArrayList<>();
+    	
+        try {
+        	textParam = URLEncoder.encode(searchText, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("검색어 인코딩 실패",e);
+        }
+        
+        //String URL = NAVER_VIEW_URL + textParam + "&sort=" + sortParam + "&start=" + pageParam;
+        String URL = NAVER_VIEW_URL + sortParam + "%2Cp%" + "&query=" + textParam + "&start=" + pageParam;
+        System.out.println(URL);
+        Connection conn = Jsoup.connect(URL);
+        
+        try {
+			Document html = conn.get();
+			
+			Elements ulTag = html.getElementsByClass("lst_total _list_base");
+			
+			int liTagCnt = ulTag.toString().split("<li class=\"bx _svp_item\"").length-1;
+			System.out.println(liTagCnt);
+			for(int i=0; i < liTagCnt; i++) {
+				NaverViewTitleArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("api_txt_lines total_tit _cross_trigger").text());
+				NaverViewTitleHrefArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("api_txt_lines total_tit _cross_trigger").attr("href"));
+				NaverViewNameArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("total_info").get(0).getElementsByClass("total_sub").get(0).getElementsByClass("sub_txt sub_name").text());
+				NaverViewRegTmArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("total_info").get(0).getElementsByClass("total_sub").get(0).getElementsByClass("sub_time sub_txt").text());
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+        map.put("NaverNewsTitleArr", NaverViewTitleArr);
+        map.put("NaverNewsHrefArr", NaverViewTitleHrefArr);
+        map.put("NaverNewsCompArr", NaverViewNameArr);
+        map.put("NaverNewsRegTmArr", NaverViewRegTmArr);
+        
+    	return map;
+    }    
+    /*
+     * NAVER VIEW(CAFE,BLOG) SEARCH JSOUP CRAWLING <<END>>
      */
     
     /*
