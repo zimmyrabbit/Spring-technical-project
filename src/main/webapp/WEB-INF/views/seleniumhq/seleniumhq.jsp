@@ -413,6 +413,34 @@ header {
 	width : 40px;
 	text-align: center;
 }
+
+ul.tabs{
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+ul.tabs li{
+	background: none;
+	color: #222;
+	display: inline-block;
+	padding: 10px 15px;
+	cursor: pointer;
+}
+
+ul.tabs li.current{
+	background: #ededed;
+	color: #222;
+}
+
+.tab-content{
+	display: none;
+	background: #ededed;
+	padding: 15px;
+}
+
+.tab-content.current{
+	display: inherit;
+}
 </style>
 
 <meta charset="UTF-8">
@@ -479,39 +507,61 @@ header {
 		<div>
 		</div>
 	</div>
-	<div class=" m-4 shadow-lg">
-		<div id="newsHead" class="parentNewsDiv newsHead pt-4 h1 fw-bold">
-			<div id="naverNewsHead" class="naverNewsDiv newsHead">News</div>
+	
+	<div>
+		<ul class="tabs m-4">
+			<li class="tab-link current" data-tab="tab-1">tab-1</li>
+			<li class="tab-link" data-tab="tab-2">tab-2</li>
+			<li class="tab-link" data-tab="tab-3">tab-3</li>
+		</ul>
+		
+		<div id ="tab-1" class="tab-content m-4 shadow-lg current">
+			<div id="newsHead" class="parentNewsDiv newsHead pt-4 h1 fw-bold">
+				<div id="naverNewsHead" class="naverNewsDiv newsHead">News</div>
+			</div>
+	
+			<div style="margin-left: 50px;">
+				<button id="initBtn" onclick="initSearch(0)" class="btn btn-primary">초기화</button>
+				<button id="scrapBtn" onclick="scrapNews()" class="btn btn-primary">스크랩</button>
+				<button class="openBtn btn btn-primary" onclick="reqScrapList()">북마크</button>
+			</div>
+	
+			<div id="newsBody" class="parentNewsDiv">
+				<div class="naverNewsDiv">
+					<div id="NewsBodyContent"></div>
+					<div id="NewsBodyPaging" class="newsHead"></div>
+				</div>
+			</div>
+	
+			<div class="modal hidden">
+				<div class="bg"></div>
+				<div class="modalBox">
+					<ul class="tree" id="scrapbox">
+						<li><input type="checkbox" id="scrap"> <label
+							for="root">ROOT</label>
+							<ul id="rootbox">
+							</ul></li>
+					</ul>
+					<div class="closeBtn">닫기</div>
+				</div>
+			</div>
+	
+			<div id="toast" class='text-center'></div>
 		</div>
-
-		<div style="margin-left: 50px;">
-			<button id="initBtn" onclick="initSearch(0)" class="btn btn-primary">초기화</button>
-			<button id="scrapBtn" onclick="scrapNews()" class="btn btn-primary">스크랩</button>
-			<button class="openBtn btn btn-primary" onclick="reqScrapList()">북마크</button>
-		</div>
-
-		<div id="newsBody" class="parentNewsDiv">
-			<div class="naverNewsDiv">
-				<div id="NewsBodyContent"></div>
-				<div id="NewsBodyPaging" class="newsHead"></div>
+		<div id="tab-2" class="tab-content m-4 shadow-lg">
+			<div id="viewBody" class="parentNewsDiv">
+				<div class="naverNewsDiv">
+					<div id="ViewBodyContent"></div>
+					<div id="ViewBodyPaging" class="newsHead"></div>
+				</div>
 			</div>
 		</div>
-
-		<div class="modal hidden">
-			<div class="bg"></div>
-			<div class="modalBox">
-				<ul class="tree" id="scrapbox">
-					<li><input type="checkbox" id="scrap"> <label
-						for="root">ROOT</label>
-						<ul id="rootbox">
-						</ul></li>
-				</ul>
-				<div class="closeBtn">닫기</div>
-			</div>
+		<div id="tab-3" class="tab-content m-4 shadow-lg">
+		tab3
 		</div>
-
-		<div id="toast" class='text-center'></div>
 	</div>
+	
+	
 </body>
 <script type="text/javascript">
 
@@ -539,6 +589,16 @@ $(document).ready(function() {
  	if($("#setTime").value != "") {
  		startTimer(0);
  	}
+ 	
+	$('ul.tabs li').click(function(){
+		var tab_id = $(this).attr('data-tab');
+
+		$('ul.tabs li').removeClass('current');
+		$('.tab-content').removeClass('current');
+
+		$(this).addClass('current');
+		$("#"+tab_id).addClass('current');
+	})
 })
 
 /*
