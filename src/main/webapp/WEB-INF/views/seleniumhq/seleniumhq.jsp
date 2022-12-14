@@ -829,6 +829,63 @@ function googleNewsSetting(data,query) {
 }
 
 /*
+ * NAVER VIEW SETTING FUNCTION
+ */
+function reqNaverView(pageflag, query) {
+	
+	var query = query; 
+	var vNaverView = "";
+	var vNaverViewPaging = "";
+
+	openLoading();
+	
+	$("#ViewBodyContent").html("");
+	
+	$.ajax({
+		type : 'post'
+		, url : '/seleniumhq/getNaverView'
+		, data : {"query" : query
+				  ,"pageflag" : pageflag}
+		, success : function(data) {
+			
+			vNaverView += "<table class='table table-striped table-hover text-center' id='table'>";
+			vNaverView += "	<th width='30' class='text-center'></th> <th width='100' class='text-center'>플랫폼</th> <th width='100' class='text-center'>키워드</th> <th width='200' class='text-center'>뉴스사</th> <th width='800' class='text-center'>제목</th> <th width='100' class='text-center'>작성일</th>";
+		
+			for(var i=0; i<data.naverView.naverViewTitleArr.length; i++) {
+				vNaverView += "  <tr>"
+				vNaverView += "	<td> <input type='checkbox' name='news_checkbox'> </td>"
+				vNaverView += "	<td> GOOGLE </td>"
+				vNaverView += "	<td>" + query + "</td>"
+				vNaverView += "	<td>" + data.naverView.naverViewNameArr[i] + "</td>"
+				vNaverView += "    <td> <a class='newslink' id='" + data.naverView.naverViewTitleHrefArr[i] + "' onclick=newsPopup(this.id)>" + data.naverView.naverViewTitleArr[i] + "</a> </td>"
+				vNaverView += "    <td class='font'>" + data.naverView.naverViewRegTmArr[i] + "</td>"
+				vNaverView += "  </tr>"
+			}
+			
+			vNaverView += "</table>";
+			
+			$("#ViewBodyContent").html(vNaverView);
+			
+			closeLoading();
+		},
+		error : function(error) {
+			closeLoading();
+
+			alert("ERROR!");
+		}
+	})
+	
+	vNaverViewPaging += "<ul class='pagination'>"
+	for(var j=1; j<11; j++) {
+		vNaverViewPaging += "<li> <a class='newslink' onclick=reqNaverView(" + j +",'" + query + "') href='#'>" + j + " </a> </li>";
+	}
+	vNaverViewPaging += "</ul>"
+
+	$("#ViewBodyPaging").html(vNaverViewPaging);
+	
+}
+
+/*
  * [INITIALIZATION FUNCTION]
  * flag		0 : SEARCH BAR / ALL NEWS BODY DIV - INIT
  *			1 : NAVER NEWS DIV - INIT
@@ -1074,6 +1131,7 @@ function nullCheck(flag) {
 	stopTimer(); 
 	 
 	reqSearchText(0,1,keyword);
+	reqNaverView(1,"한국의학연구소");
 	 
  	var Timer = document.getElementById('Timer');
  	var time = parseInt(settime) * 60000

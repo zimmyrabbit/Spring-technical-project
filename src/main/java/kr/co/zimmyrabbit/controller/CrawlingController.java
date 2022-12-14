@@ -92,4 +92,23 @@ public class CrawlingController {
 		crawlingService.delNewsScrap(seq);
 	}
 	
+	@RequestMapping(value="/seleniumhq/getNaverView", method=RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Object> searchNaverView(HttpServletRequest request, Model model) {
+		
+		//REQUEST VARIABLE
+		String searchText = request.getParameter("query");
+		int pagingParam = Integer.parseInt(request.getParameter("pageflag"));
+		logger.info("=========searchText=========> " + searchText);
+		logger.info("=========pagingParam========> " + pagingParam);
+		
+		//RESPONSE OBJECT
+		HashMap<String, Object> map = new HashMap<>();
+
+		HashMap<String, Object> naverView = crawlingService.searchNaverView(searchText, pagingParam);
+		map.put("naverView", naverView);
+		
+		return map;
+	}
+	
 }

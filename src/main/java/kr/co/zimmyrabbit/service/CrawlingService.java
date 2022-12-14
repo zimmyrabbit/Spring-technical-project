@@ -325,10 +325,10 @@ public class CrawlingService {
     	}
     	
     	HashMap<String, Object> map = new HashMap<>();
-    	ArrayList<String> NaverViewTitleArr = new ArrayList<>(); //제목
-    	ArrayList<String> NaverViewTitleHrefArr = new ArrayList<>();
-    	ArrayList<String> NaverViewNameArr = new ArrayList<>();
-    	ArrayList<String> NaverViewRegTmArr = new ArrayList<>();
+    	ArrayList<String> naverViewTitleArr = new ArrayList<>(); //제목
+    	ArrayList<String> naverViewTitleHrefArr = new ArrayList<>();
+    	ArrayList<String> naverViewNameArr = new ArrayList<>();
+    	ArrayList<String> naverViewRegTmArr = new ArrayList<>();
     	
         try {
         	textParam = URLEncoder.encode(searchText, "UTF-8");
@@ -338,7 +338,7 @@ public class CrawlingService {
         
         //String URL = NAVER_VIEW_URL + textParam + "&sort=" + sortParam + "&start=" + pageParam;
         String URL = NAVER_VIEW_URL + sortParam + "%2Cp%" + "&query=" + textParam + "&start=" + pageParam;
-        System.out.println(URL);
+
         Connection conn = Jsoup.connect(URL);
         
         try {
@@ -347,22 +347,22 @@ public class CrawlingService {
 			Elements ulTag = html.getElementsByClass("lst_total _list_base");
 			
 			int liTagCnt = ulTag.toString().split("<li class=\"bx _svp_item\"").length-1;
-			System.out.println(liTagCnt);
+			
 			for(int i=0; i < liTagCnt; i++) {
-				NaverViewTitleArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("api_txt_lines total_tit _cross_trigger").text());
-				NaverViewTitleHrefArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("api_txt_lines total_tit _cross_trigger").attr("href"));
-				NaverViewNameArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("total_info").get(0).getElementsByClass("total_sub").get(0).getElementsByClass("sub_txt sub_name").text());
-				NaverViewRegTmArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("total_info").get(0).getElementsByClass("total_sub").get(0).getElementsByClass("sub_time sub_txt").text());
+				naverViewTitleArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("api_txt_lines total_tit _cross_trigger").text());
+				naverViewTitleHrefArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("api_txt_lines total_tit _cross_trigger").attr("href"));
+				naverViewNameArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("total_info").get(0).getElementsByClass("total_sub").get(0).getElementsByClass("sub_txt sub_name").text());
+				naverViewRegTmArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("total_info").get(0).getElementsByClass("total_sub").get(0).getElementsByClass("sub_time sub_txt").text());
 			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
         
-        map.put("NaverNewsTitleArr", NaverViewTitleArr);
-        map.put("NaverNewsHrefArr", NaverViewTitleHrefArr);
-        map.put("NaverNewsCompArr", NaverViewNameArr);
-        map.put("NaverNewsRegTmArr", NaverViewRegTmArr);
+        map.put("naverViewTitleArr", naverViewTitleArr);
+        map.put("naverViewTitleHrefArr", naverViewTitleHrefArr);
+        map.put("naverViewNameArr", naverViewNameArr);
+        map.put("naverViewRegTmArr", naverViewRegTmArr);
         
     	return map;
     }    
