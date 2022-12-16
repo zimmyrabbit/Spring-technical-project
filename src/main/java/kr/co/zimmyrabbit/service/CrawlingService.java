@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -49,6 +51,8 @@ public class CrawlingService {
 	public static final String GOOGLE_NEWS_URL_FOOT = "&hl=ko&tbas=0&tbm=nws&sxsrf=ALiCzsaO1EFCPwRq-Qm-J-j_Z7r5RzoEdA:1656091816046&ei=qPS1YsG2Ao-EmAWNkoXIDw&sa=N&ved=2ahUKEwjBqqTjzsb4AhUPAqYKHQ1JAfkQ8tMDegQIARA3&biw=1920&bih=947&dpr=1&start=";
 	
 	public static final String NAVER_VIEW_URL = "https://search.naver.com/search.naver?where=view&sm=tab_opt&mode=normal&nso=so%3";
+	
+	public static final String NAVER_PALCE_URL = "https://m.place.naver.com/hospital/11526628/review/visitor";
 	/*
 	 * NAVER NEWS SEARCH API <<START>>
 	 */
@@ -329,6 +333,7 @@ public class CrawlingService {
     	ArrayList<String> naverViewTitleHrefArr = new ArrayList<>();
     	ArrayList<String> naverViewNameArr = new ArrayList<>();
     	ArrayList<String> naverViewRegTmArr = new ArrayList<>();
+    	ArrayList<String> naverViewArr = new ArrayList<>();
     	
         try {
         	textParam = URLEncoder.encode(searchText, "UTF-8");
@@ -350,7 +355,13 @@ public class CrawlingService {
 			
 			for(int i=0; i < liTagCnt; i++) {
 				naverViewTitleArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("api_txt_lines total_tit _cross_trigger").text());
-				naverViewTitleHrefArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("api_txt_lines total_tit _cross_trigger").attr("href"));
+				
+				String naverViewTitleHref = html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("api_txt_lines total_tit _cross_trigger").attr("href");
+				naverViewTitleHrefArr.add(naverViewTitleHref);
+				
+				int startIdx = naverViewTitleHref.indexOf("https://");
+				int endIdx = naverViewTitleHref.indexOf(".");
+
 				naverViewNameArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("total_info").get(0).getElementsByClass("total_sub").get(0).getElementsByClass("sub_txt sub_name").text());
 				naverViewRegTmArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("total_info").get(0).getElementsByClass("total_sub").get(0).getElementsByClass("sub_time sub_txt").text());
 			}
@@ -363,6 +374,61 @@ public class CrawlingService {
         map.put("naverViewTitleHrefArr", naverViewTitleHrefArr);
         map.put("naverViewNameArr", naverViewNameArr);
         map.put("naverViewRegTmArr", naverViewRegTmArr);
+        
+    	return map;
+    }    
+    /*
+     * NAVER VIEW(CAFE,BLOG) SEARCH JSOUP CRAWLING <<END>>
+     */
+    
+    /*
+     * NAVER PLACE SEARCH JSOUP CRAWLING <<START>>
+     */
+    public HashMap<String, Object> searchNaverPlace(String searchText) {
+    	
+    	String textParam = "";
+    	
+    	HashMap<String, Object> map = new HashMap<>();
+    	ArrayList<String> naverPlacetitle = new ArrayList<>(); //리뷰
+    	ArrayList<String> naverPlaceReviewArr = new ArrayList<>(); //리뷰
+    	ArrayList<String> naverPlaceUserIDArr = new ArrayList<>();
+    	ArrayList<String> naverPlaceRegTmArr = new ArrayList<>();
+    	
+        try {
+        	textParam = URLEncoder.encode(searchText, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("검색어 인코딩 실패",e);
+        }
+        
+        //String URL = NAVER_VIEW_URL + textParam + "&sort=" + sortParam + "&start=" + pageParam;
+        String URL = NAVER_PALCE_URL;
+
+        Connection conn = Jsoup.connect(URL);
+        
+        try {
+			Document html = conn.get();
+			
+			Elements ulTag = html.getElementsByClass("eCPGL");
+			
+			String placeTitle = html.getElementsByClass("Fc1rA").text();
+			
+			int liTagCnt = ulTag.toString().split("<li class=\"YeINN\"").length-1;
+			
+			for(int i=0; i < liTagCnt; i++) {
+				naverPlacetitle.add(placeTitle);
+				naverPlaceReviewArr.add(html.getElementsByClass("eCPGL").get(0).getElementsByTag("li").get(i).getElementsByClass("ZZ4OK IwhtZ").get(0).getElementsByClass("xHaT3").get(0).getElementsByTag("span").text());
+				naverPlaceUserIDArr.add(html.getElementsByClass("eCPGL").get(0).getElementsByTag("li").get(i).getElementsByClass("Lia3P").get(0).getElementsByClass("Hazns").get(0).getElementsByClass("sBWyy").text());
+				naverPlaceRegTmArr.add(html.getElementsByClass("eCPGL").get(0).getElementsByTag("li").get(i).getElementsByClass("sb8UA").get(0).getElementsByClass("P1zUJ").get(0).getElementsByClass("place_blind").get(1).text());
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+        map.put("naverPlacetitle", naverPlacetitle);
+        map.put("naverPlaceReviewArr", naverPlaceReviewArr);
+        map.put("naverPlaceUserIDArr", naverPlaceUserIDArr);
+        map.put("naverPlaceRegTmArr", naverPlaceRegTmArr);
         
     	return map;
     }    

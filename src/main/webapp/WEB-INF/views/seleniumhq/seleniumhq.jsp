@@ -510,9 +510,9 @@ ul.tabs li.current{
 	
 	<div>
 		<ul class="tabs m-4">
-			<li class="tab-link current" data-tab="tab-1">tab-1</li>
-			<li class="tab-link" data-tab="tab-2">tab-2</li>
-			<li class="tab-link" data-tab="tab-3">tab-3</li>
+			<li class="tab-link current" data-tab="tab-1">News</li>
+			<li class="tab-link" data-tab="tab-2">Naver View</li>
+			<li class="tab-link" data-tab="tab-3">Naver Place</li>
 		</ul>
 		
 		<div id ="tab-1" class="tab-content m-4 shadow-lg current">
@@ -548,7 +548,11 @@ ul.tabs li.current{
 	
 			<div id="toast" class='text-center'></div>
 		</div>
+		
 		<div id="tab-2" class="tab-content m-4 shadow-lg">
+			<div id="viewHead" class="parentNewsDiv newsHead pt-4 h1 fw-bold">
+				<div id="naverViewHead" class="naverNewsDiv newsHead">Naver View</div>
+			</div>
 			<div id="viewBody" class="parentNewsDiv">
 				<div class="naverNewsDiv">
 					<div id="ViewBodyContent"></div>
@@ -556,9 +560,18 @@ ul.tabs li.current{
 				</div>
 			</div>
 		</div>
+		
 		<div id="tab-3" class="tab-content m-4 shadow-lg">
-		tab3
+			<div id="placeHead" class="parentNewsDiv newsHead pt-4 h1 fw-bold">
+				<div id="naverPlaceHead" class="naverNewsDiv newsHead">Naver Place</div>
+			</div>
+			<div id="placeBody" class="parentNewsDiv">
+				<div class="naverNewsDiv">
+					<div id="PlaceBodyContent"></div>
+				</div>
+			</div>
 		</div>
+		
 	</div>
 	
 	
@@ -886,6 +899,53 @@ function reqNaverView(pageflag, query) {
 }
 
 /*
+ * NAVER PLACE SETTING FUNCTION
+ */
+function reqNaverPlace() {
+	
+	var query = ""; 
+	var vNaverPlace = "";
+
+	openLoading();
+	
+	$("#PlaceBodyContent").html("");
+	
+	$.ajax({
+		type : 'post'
+		, url : '/seleniumhq/getNaverPlace'
+		, data : {"query" : query}
+		, success : function(data) {
+			
+			vNaverPlace += "<table class='table table-striped table-hover text-center' id='table'>";
+			vNaverPlace += "	<th width='30' class='text-center'></th> <th width='100' class='text-center'>플랫폼</th> <th width='100' class='text-center'>키워드</th> <th width='200' class='text-center'>뉴스사</th> <th width='800' class='text-center'>제목</th> <th width='100' class='text-center'>작성일</th>";
+		
+			for(var i=0; i<data.naverPlace.naverPlaceReviewArr.length; i++) {
+				vNaverPlace += "  <tr>"
+				vNaverPlace += "		<td> <input type='checkbox' name='news_checkbox'> </td>"
+				vNaverPlace += "		<td> GOOGLE </td>"
+				vNaverPlace += "		<td>" + data.naverPlace.naverPlacetitle[i] + "</td>"
+				vNaverPlace += "		<td>" + data.naverPlace.naverPlaceUserIDArr[i] + "</td>"
+				//vNaverPlace += " 	<td> <a class='newslink' id='" + data.naverPlace.naverViewTitleHrefArr[i] + "' onclick=newsPopup(this.id)>" + data.naverPlace.naverViewTitleArr[i] + "</a> </td>"
+				vNaverPlace += "		<td>" + data.naverPlace.naverPlaceReviewArr[i] + "</td>"
+				vNaverPlace += "    	<td class='font'>" + data.naverPlace.naverPlaceRegTmArr[i] + "</td>"
+				vNaverPlace += "  </tr>"
+			}
+			
+			vNaverPlace += "</table>";
+			
+			$("#PlaceBodyContent").html(vNaverPlace);
+			
+			closeLoading();
+		},
+		error : function(error) {
+			closeLoading();
+
+			alert("ERROR!");
+		}
+	})
+}
+
+/*
  * [INITIALIZATION FUNCTION]
  * flag		0 : SEARCH BAR / ALL NEWS BODY DIV - INIT
  *			1 : NAVER NEWS DIV - INIT
@@ -1132,6 +1192,7 @@ function nullCheck(flag) {
 	 
 	reqSearchText(0,1,keyword);
 	reqNaverView(1,"한국의학연구소");
+	reqNaverPlace();
 	 
  	var Timer = document.getElementById('Timer');
  	var time = parseInt(settime) * 60000

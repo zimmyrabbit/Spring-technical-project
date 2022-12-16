@@ -111,4 +111,21 @@ public class CrawlingController {
 		return map;
 	}
 	
+	@RequestMapping(value="/seleniumhq/getNaverPlace", method=RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Object> searchNaverPlace(HttpServletRequest request, Model model) {
+		
+		//REQUEST VARIABLE
+		String searchText = request.getParameter("query");
+		logger.info("=========searchText=========> " + searchText);
+		
+		//RESPONSE OBJECT
+		HashMap<String, Object> map = new HashMap<>();
+
+		HashMap<String, Object> naverPlace = crawlingService.searchNaverPlace(searchText);
+		map.put("naverPlace", naverPlace);
+		
+		return map;
+	}
+	
 }
