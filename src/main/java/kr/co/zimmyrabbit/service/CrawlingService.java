@@ -333,7 +333,7 @@ public class CrawlingService {
     	ArrayList<String> naverViewTitleHrefArr = new ArrayList<>();
     	ArrayList<String> naverViewNameArr = new ArrayList<>();
     	ArrayList<String> naverViewRegTmArr = new ArrayList<>();
-    	ArrayList<String> naverViewArr = new ArrayList<>();
+    	ArrayList<String> naverViewDiviArr = new ArrayList<>();
     	
         try {
         	textParam = URLEncoder.encode(searchText, "UTF-8");
@@ -359,8 +359,17 @@ public class CrawlingService {
 				String naverViewTitleHref = html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("api_txt_lines total_tit _cross_trigger").attr("href");
 				naverViewTitleHrefArr.add(naverViewTitleHref);
 				
-				int startIdx = naverViewTitleHref.indexOf("https://");
+				int startIdx = naverViewTitleHref.indexOf("//");
 				int endIdx = naverViewTitleHref.indexOf(".");
+				String naverViewDivi = naverViewTitleHref.substring(startIdx+2, endIdx);
+				
+				if("blog".equals(naverViewDivi)) {
+					naverViewDiviArr.add(naverViewDivi);
+				}else if("cafe".equals(naverViewDivi)) {
+					naverViewDiviArr.add(naverViewDivi);
+				}else {
+					naverViewDiviArr.add("");
+				}
 
 				naverViewNameArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("total_info").get(0).getElementsByClass("total_sub").get(0).getElementsByClass("sub_txt sub_name").text());
 				naverViewRegTmArr.add(html.getElementsByClass("lst_total _list_base").get(0).getElementsByTag("li").get(i).getElementsByClass("total_wrap api_ani_send").get(0).getElementsByClass("total_area").get(0).getElementsByClass("total_info").get(0).getElementsByClass("total_sub").get(0).getElementsByClass("sub_time sub_txt").text());
@@ -374,6 +383,7 @@ public class CrawlingService {
         map.put("naverViewTitleHrefArr", naverViewTitleHrefArr);
         map.put("naverViewNameArr", naverViewNameArr);
         map.put("naverViewRegTmArr", naverViewRegTmArr);
+        map.put("naverViewDiviArr", naverViewDiviArr);
         
     	return map;
     }    

@@ -862,12 +862,12 @@ function reqNaverView(pageflag, query) {
 		, success : function(data) {
 			
 			vNaverView += "<table class='table table-striped table-hover text-center' id='table'>";
-			vNaverView += "	<th width='30' class='text-center'></th> <th width='100' class='text-center'>플랫폼</th> <th width='100' class='text-center'>키워드</th> <th width='200' class='text-center'>뉴스사</th> <th width='800' class='text-center'>제목</th> <th width='100' class='text-center'>작성일</th>";
+			vNaverView += "	<th width='30' class='text-center'></th> <th width='100' class='text-center'>구분</th> <th width='100' class='text-center'>키워드</th> <th width='200' class='text-center'>카페/블로그명</th> <th width='800' class='text-center'>제목</th> <th width='100' class='text-center'>작성일</th>";
 		
 			for(var i=0; i<data.naverView.naverViewTitleArr.length; i++) {
 				vNaverView += "  <tr>"
 				vNaverView += "	<td> <input type='checkbox' name='news_checkbox'> </td>"
-				vNaverView += "	<td> GOOGLE </td>"
+				vNaverView += "	<td>" + data.naverView.naverViewDiviArr[i] + "</td>"
 				vNaverView += "	<td>" + query + "</td>"
 				vNaverView += "	<td>" + data.naverView.naverViewNameArr[i] + "</td>"
 				vNaverView += "    <td> <a class='newslink' id='" + data.naverView.naverViewTitleHrefArr[i] + "' onclick=newsPopup(this.id)>" + data.naverView.naverViewTitleArr[i] + "</a> </td>"
@@ -917,7 +917,7 @@ function reqNaverPlace() {
 		, success : function(data) {
 			
 			vNaverPlace += "<table class='table table-striped table-hover text-center' id='table'>";
-			vNaverPlace += "	<th width='30' class='text-center'></th> <th width='100' class='text-center'>플랫폼</th> <th width='100' class='text-center'>키워드</th> <th width='200' class='text-center'>뉴스사</th> <th width='800' class='text-center'>제목</th> <th width='100' class='text-center'>작성일</th>";
+			vNaverPlace += "	<th width='30' class='text-center'></th> <th width='100' class='text-center'>플랫폼</th> <th width='100' class='text-center'>키워드</th> <th width='200' class='text-center'>닉네임</th> <th width='800' class='text-center'>내용</th> <th width='100' class='text-center'>작성일</th>";
 		
 			for(var i=0; i<data.naverPlace.naverPlaceReviewArr.length; i++) {
 				vNaverPlace += "  <tr>"
